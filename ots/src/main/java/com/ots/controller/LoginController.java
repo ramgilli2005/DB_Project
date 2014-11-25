@@ -26,7 +26,9 @@ public class LoginController {
 	private static final Logger log = Logger.getLogger(LoginController.class);
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String loginPage(HttpServletRequest req, HttpServletResponse resp){
+	public String loginPage(HttpServletRequest req, HttpServletResponse resp, 
+			@ModelAttribute("model") ModelMap model){
+		log.debug("Entering Login Controller GET");
 		HttpSession session = req.getSession();
 		session.invalidate();
 		return "login";
@@ -45,9 +47,11 @@ public class LoginController {
 			info.setPwd(req.getParameter("password"));
 			UserInfo uInfo = loginDAO.checkLogin(info);
 			if(uInfo == null){
+				log.debug("Invalid credentials!!!");
 				model.addAttribute("errorMsg", "Invalid Credentials");
 				return "login";
 			}
+			log.debug("Client ID: "+ uInfo.getClientId()); 
 			model.addAttribute("uname", uInfo.getfName()+", "+uInfo.getlName());
 			model.addAttribute("usrLvl", uInfo.getLvl());
 			session.setAttribute("clientId", uInfo.getClientId());

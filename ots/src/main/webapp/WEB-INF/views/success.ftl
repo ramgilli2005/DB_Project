@@ -1,4 +1,3 @@
-<#assign springform=JspTaglibs["http://www.springframework.org/tags/form"]>
 <#import "/spring.ftl" as spring />
 
 <head>

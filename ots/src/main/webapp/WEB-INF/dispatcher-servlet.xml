@@ -12,12 +12,11 @@
 	http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 	
 	<mvc:annotation-driven />
-	<context:component-scan base-package="com.ots.controller" />
+	<context:component-scan base-package="com.ots.controller, com.ots.dao" />
 	
 	<bean id="freemarkerConfig"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<property name="templateLoaderPath" value="/WEB-INF/views/" />
-
 	</bean>
 	
 	<bean id="viewResolver"

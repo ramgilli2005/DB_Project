@@ -10,6 +10,7 @@ public class ConnectionManager {
 	static private ConnectionPool getMySqlConnectionPool() {
 		ConnectionPool cp = null;
 		try {
+			log.debug("Config Manager Test: "+ ConfigManager.getString("database.connection.driver"));
 			cp = new ConnectionPool(ConfigManager.getString("database.connection.driver"),
 					ConfigManager.getString("database.connection.string"),
 					ConfigManager.getString("database.username"),
@@ -18,7 +19,7 @@ public class ConnectionManager {
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error in creating Connection: "+e);
 		}
 		return cp;
 	}
