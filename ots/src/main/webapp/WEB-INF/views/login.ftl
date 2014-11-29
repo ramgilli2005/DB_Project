@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<script type="text/javascript" src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/jquery-1.11.1.min.js"></script>
 <title>WELCOME TO OTS</title>
 
 <script>
@@ -23,6 +23,10 @@ function logincheck(){
 	  }
 	 
 	}
+	
+	function redirectPg() {
+        location.href = "signup.html";
+    }
 	 
 function myFunction()
 {
@@ -74,7 +78,10 @@ $(document).ready(function(){
 	<TR height=26 bgcolor=#F4F7EC>
 	
 	<td style="BORDER-RIGHT:#fff 1px solid;padding-left: 180px; padding-top: 40px;  margin-left:30px;">
-		</td><TD width=30%><input type="submit"  class="submitButton" value="login"  /></td>
+		</td><TD width=30%><input type="submit"  class="submitButton" value="login"  />
+		&nbsp;&nbsp;&nbsp;<input type="button"  id="signup" name="signup" class="submitButton" value="SignUp"  onClick="redirectPg()"/>
+		</td>
+		</tr>
 		</tr>
 	</table>
 		

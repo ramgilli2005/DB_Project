@@ -15,54 +15,54 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.ots.beans.LoginInfo;
 import com.ots.beans.UserInfo;
 import com.ots.dao.LoginDAO;
+import com.ots.dao.SignUpDAO;
 
 @Controller
-@RequestMapping("login.html")
-public class LoginController {
+@RequestMapping("signup.html")
+public class SignUpController {
 
 	@Autowired
-	LoginDAO loginDAO;
-
-	private static final Logger log = Logger.getLogger(LoginController.class);
+	SignUpDAO signUpDAO;
+	
+	private static final Logger log = Logger.getLogger(SignUpController.class);
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String loginPage(HttpServletRequest req, HttpServletResponse resp, 
+	public String signUpPage(HttpServletRequest req, HttpServletResponse resp, 
 			@ModelAttribute("model") ModelMap model){
 		log.debug("Entering Login Controller GET");
 		HttpSession session = req.getSession();
 		session.invalidate();
-		return "login";
+		return "signup";
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public String verifyUser(HttpServletRequest req, HttpServletResponse resp,
 			@ModelAttribute("model") ModelMap model) {
 		
-		HttpSession session = req.getSession();
-		
 		try{
-			LoginInfo info = new LoginInfo();
-			log.debug("User Name: " +req.getParameter("username"));
-			info.setUserId(req.getParameter("username"));
-			info.setPwd(req.getParameter("password"));
-			UserInfo uInfo = loginDAO.checkLogin(info);
-			if(uInfo == null){
-				log.debug("Invalid credentials!!!");
-				model.addAttribute("errorMsg", "Invalid Credentials");
-				return "login";
+			UserInfo uInfo = new UserInfo();
+			String ssn = req.getParameter("ssn");
+			if(signUpDAO.checkUserExists(ssn)){
+				model.addAttribute("errorMsg", "User Already Exists");
+				return "signup";
 			}
-			log.debug("Client ID: "+ uInfo.getClientId()); 
-			model.addAttribute("uname", uInfo.getfName()+", "+uInfo.getlName());
-			model.addAttribute("usrLvl", uInfo.getLvl());
-			session.setAttribute("clientId", uInfo.getClientId());
-			session.setAttribute("uname", uInfo.getfName()+", "+uInfo.getlName());
-			model.addAttribute("Page", "success");
-			return "main";
+			
+			uInfo.setfName(req.getParameter("fname"));
+			uInfo.setlName(req.getParameter("lname"));
+			uInfo.setSsn(ssn);
+			uInfo.setPhoneNo(req.getParameter("phno"));
+			uInfo.setMobNo(req.getParameter("mobNo"));
+			uInfo.setAddress(req.getParameter("address"));
+			uInfo.setCity(req.getParameter("city"));
+			uInfo.setState(req.getParameter("state"));
+			uInfo.setZip(req.getParameter("zip"));
+			
+			return "login";
 			
 		} catch(Exception e){
 			log.error("Error in Login Controller! "+ e);
 		}
 		
-		return "login";
+		return "signup";
 	}
 }
