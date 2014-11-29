@@ -21,9 +21,41 @@ function signupcheck(){
 		alert("Please fill in all required details");
 	 	return false;
 	  }
-	  
 	 
+	var a = document.myform.cardno.value;
+	var b = document.myform.cardname.value;
+	var c = document.myform.month.value;
+	var d = document.myform.year.value;
+	var e = document.myform.cvv.value;
+	
+	if(a==''||b==''||c==''||d==''||e==''){
+		alert(a);
+		alert(b);
+		alert(c);
+		alert(d);
+		alert(e);
+	
+		alert("Please fill in card details");
+		return false;
 	}
+	
+	var f = document.myform.pwd.value;
+	var g = document.myform.confirmpwd.value;
+	
+	if(f != g){
+		alert("Passwords do not match");
+		return false;
+	}
+	
+	var emailvalid = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	if(!u.match(emailvalid))
+	{
+		alert("Enter a valid Email ID!");
+		return false;
+	}
+
+
+}
 	 
 function myFunction()
 {
@@ -34,11 +66,10 @@ function myFunction()
 	if (""!=str)
 	{
 		alert('${model["errorMsg"]}');
-		//ed.style.display='block';	
 		document.myform.getElementById("user_name").focus();
 	}
 <#else>
-//ed.style.display='none';
+
 </#if>
 
 }
@@ -46,6 +77,9 @@ $(document).ready(function(){
 	$('#user_name').focus();	
 });
 
+function backFunc(){
+	location.href = "login.html";
+}
 	
 </script>
 </head>
@@ -73,11 +107,23 @@ $(document).ready(function(){
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=lname id='lname' maxlength="20"></td>
 	</tr>
-
+	
+	<TR height=15 bgcolor=#F4F7EC>
+	<TD width=50% style="padding-left:103px; font-size: 9pt;">Password:</td>
+	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
+	<input type=password name=pwd id='pwd' maxlength="20"></td>
+	</tr>
+	
+	<TR height=15 bgcolor=#F4F7EC>
+	<TD width=50% style="padding-left:103px; font-size: 9pt;">Confirm Password:</td>
+	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
+	<input type=password name=confirmpwd id='confirmpwd' maxlength="20"></td>
+	</tr>
+	
 	<TR height=15 bgcolor=#F4F7EC>	
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Social Security No:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
-	<input type=text name=ssn id='ssn' maxlength="20"></td>
+	<input type=text name=ssn id='ssn' maxlength="9"></td>
 	</tr>
 
 	<TR height=15 bgcolor=#F4F7EC>
@@ -103,26 +149,57 @@ $(document).ready(function(){
 	<TR height=15 bgcolor=#F4F7EC>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">ZIP:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
-	<input type=text name=zip id='zip' maxlength="20">
+	<input type=text name=zip id='zip' maxlength="6">
 	</td>
 	</tr>
 	
 	<TR height=15 bgcolor=#F4F7EC>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Phone no:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
-	<input type=text name=phno id='phno' maxlength="20"></td>
+	<input type=text name=phno id='phno' maxlength="10"></td>
 	</tr>
 	
 	<TR height=15 bgcolor=#F4F7EC>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Mobile No:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
-	<input type=text name=mobno id='mobno' maxlength="20"></td>
+	<input type=text name=mobno id='mobno' maxlength="10"></td>
 	</tr>
 	
 	<TR height=15 bgcolor=#F4F7EC>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Email:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=email id='email' maxlength="20"></td>
+	</tr>
+	<tr bgcolor=red>
+	<TD width=50% style="padding-left:141px; font-size: 12pt;">Card Details</td>
+	<td></td>
+	</tr>
+	<TR height=15 bgcolor=#F4F7EC>
+	<TD width=50% style="padding-left:103px; font-size: 9pt;">Card Number</td>
+	<td width=65% >
+	<input type=text name=cardno id='cardno' maxlength="16"></td>
+	</tr>
+	
+	<TR height=15 bgcolor=#F4F7EC>
+	<TD width=50% style="padding-left:103px; font-size: 9pt;">Name On Card</td>
+	<td width=65% >
+	<input type=text name=cardname id='cardname' maxlength="20"></td>
+	</tr>
+	<TR height=15 bgcolor=#F4F7EC>
+	<td></td>
+	<td style="font-size: 9pt;">&nbsp;Month &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year</td>
+	
+	</tr>
+	<TR height=15 bgcolor=#F4F7EC>
+	<TD width=50% style="padding-left:103px; padding-top: -5px; font-size: 9pt;">Expiry</td>
+	<td width=5% >
+	<input type=text name=month id='month' maxlength="2" style="width:50px;"> / <input type=text name=year id='year' maxlength="2" style="width:50px;"></td>
+	</tr>
+	
+	<TR height=15 bgcolor=#F4F7EC>
+	<TD width=50% style="padding-left:103px; font-size: 9pt;">CVV</td>
+	<td width=65% >
+	<input type=password name=cvv id='cvv' maxlength="3" style="width:50px;">
 	</tr>
 	
 	<TR height=15 bgcolor=#F4F7EC>

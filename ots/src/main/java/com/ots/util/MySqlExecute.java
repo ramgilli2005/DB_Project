@@ -10,7 +10,7 @@ public class MySqlExecute {
 	static final Logger log = Logger.getLogger(MySqlExecute.class);
 	
 	//SELECT query
-	static public ResultSet executeMySqlQuery(String sql) {
+	static public ResultSet executeMySqlQuery(String sql) throws Exception{
 		Connection conn = null;
 		Statement stmt = null;
 	    ResultSet rs = null;  
@@ -23,6 +23,7 @@ public class MySqlExecute {
 		    ConnectionManager.mySqlConnectionPool.free(conn);
 		} catch(SQLException e) {
 			log.error("Error in executeMySql query: "+e);
+			throw new Exception("Error in query data");
 		} catch (Exception e) {
 			log.error("Error in executeMySql query: "+e);		
 		}
@@ -31,7 +32,7 @@ public class MySqlExecute {
 	}
 	
 	//INSERT, UPDATE, and DELETE queries
-	static public int executeUpdateMySqlQuery(String sql) {
+	static public int executeUpdateMySqlQuery(String sql) throws Exception{
 		Connection conn = null;
 		Statement stmt = null;
 	    int rs = 0;  
@@ -43,6 +44,7 @@ public class MySqlExecute {
 		    ConnectionManager.mySqlConnectionPool.free(conn);
 		} catch(SQLException e) {
 			log.error("Error in executeUpdateMySql query: "+e);
+			throw new Exception("Error in query data");
 		} catch (Exception e) {
 			log.error("Error in executeUpdateMySql query: "+e);
 			}finally {			

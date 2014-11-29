@@ -36,8 +36,8 @@ public class SignUpDAO {
 		return false;
 	}
 
-	public String createClientId(String prefix) {
-		String query = "select substring(client_id,4) AS Client_Id from client order by creation_date desc Limit 1";
+	public String createClientId(String prefix) throws Exception{
+		String query = "select substring(client_id,4) AS Client_Id from client order by Creation_date desc Limit 1";
 		try {
 			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
 			int id = 100000;
@@ -49,35 +49,58 @@ public class SignUpDAO {
 			return prefix + id;
 		} catch (Exception e) {
 			log.error("Error in creating clientId");
+			throw new Exception("Unable to create Client ID");
 		}
 
-		return null;
 	}
 
-	public String insertUserDetails(UserInfo uInfo) {
+	public String insertUserDetails(UserInfo uInfo) throws Exception{
 		StringBuilder clIdprefix = new StringBuilder();
-		clIdprefix.append(uInfo.getfName().substring(0, 1));
+		clIdprefix.append(uInfo.getfName().substring(0, 1).toLowerCase());
 		clIdprefix.append("x");
-		clIdprefix.append(uInfo.getlName().substring(0, 1));
-		String clientId = createClientId(clIdprefix.toString());
-		log.debug("Client Id:" + clientId);
-		String query = "insert into client(`Client_Id`, `Client_pwd`, `Client_SSN`, "
-				+ "`Client_fname`, `Client_lname`, `Client_mobile`, `Client_phno`, `Client_level`, "
-				+ "`Client_email`) values ('"+clientId+"', '"+uInfo.getPassword()+"', "
-						+ "'"+uInfo.getSsn()+"', '"+uInfo.getfName()+"', "
-				+ "'"+uInfo.getlName()+"', '"+uInfo.getMobNo()+"', '"+uInfo.getPhoneNo()+"', "
-						+ "'SILVER', '"+uInfo.getEmail()+"')";
-		String addressQuery = "insert into address(`Address_street`,`Address_City`,`Address_State`,"
-								+ "`Address_ZIP`,`Address_Client_Id`)"
-								+"values('"+uInfo.getAddress()+"','"+uInfo.getCity()+"','"+uInfo.getState()+"',"
-								+ "'"+uInfo.getZip()+"','"+clientId+"')";
+		clIdprefix.append(uInfo.getlName().substring(0, 1).toLowerCase());
+		
 		try{
+			String clientId = createClientId(clIdprefix.toString());
+			log.debug("Client Id:" + clientId);
+			String query = "insert into client(`Client_Id`, `Client_pwd`, `Client_SSN`, "
+					+ "`Client_fname`, `Client_lname`, `Client_mobile`, `Client_phno`, `Client_level`, "
+					+ "`Client_email`) values ('"+clientId+"', '"+uInfo.getPassword()+"', "
+							+ "'"+uInfo.getSsn()+"', '"+uInfo.getfName()+"', "
+					+ "'"+uInfo.getlName()+"', '"+uInfo.getMobNo()+"', '"+uInfo.getPhoneNo()+"', "
+							+ "'SILVER', '"+uInfo.getEmail()+"')";
+			String addressQuery = "insert into address(`Address_street`,`Address_City`,`Address_State`,"
+									+ "`Address_ZIP`,`Address_Client_Id`)"
+									+"values('"+uInfo.getAddress()+"','"+uInfo.getCity()+"','"+uInfo.getState()+"',"
+									+ "'"+uInfo.getZip()+"','"+clientId+"')";
+			
 			MySqlExecute.executeUpdateMySqlQuery(query);
 			MySqlExecute.executeUpdateMySqlQuery(addressQuery);
+
 			return clientId;
 		} catch(Exception e){
 			log.error("Error in inserting Client Details");
+			throw new Exception("Unable to Insert Data");
 		}
-		return null;
+	}
+	
+	public boolean deleteUserDetails(String clientId){
+		String clientQuery = "DELETE from client where Client_Id='"+clientId+"'";
+		String addressQuery = "DELETE from address where Address_Client_Id='"+clientId+"'";
+		
+		try{
+			MySqlExecute.executeUpdateMySqlQuery(addressQuery);
+			
+		} catch(Exception e){
+			log.error("No data to delete in Address table"+e);
+		}
+		try{
+			MySqlExecute.executeUpdateMySqlQuery(clientQuery);
+			
+			return true;
+		} catch(Exception e){
+			log.error("No data to delete in Client table!!!"+e);
+		}
+		return false;
 	}
 }
