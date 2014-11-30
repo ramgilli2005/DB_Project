@@ -36,13 +36,13 @@ function myFunction()
 	var str='${model["errorMsg"]}';
 	if (""!=str)
 	{
-		alert('${model["errorMsg"]}');
-		//ed.style.display='block';	
+		//alert('${model["errorMsg"]}');
+		//$(#errordiv).show();	
 		document.myform.getElementById("user_name").focus();
 	}
-<#else>
-//ed.style.display='none';
-</#if>
+	<#else>
+	//$(#errordiv).hide();
+	</#if>
 
 }
 $(document).ready(function(){
@@ -65,20 +65,36 @@ $(document).ready(function(){
 	<table width=470px align=center cellspacing=0 cellpadding=6 style="BORDER:#E6e6e6 1px solid; font-family:'Helvetica,Arial,sans-serif'; font-size: 11pt; margin-top: 128px; color: black;width: 450px;">
 	<TR height=38><TD colspan=3 align=center bgcolor="#636563" style="color:white;">
 	<B>Please Login</B></TD></TR>
-	<TR height=26 bgcolor=#F4F7EC>
+	<TR height=26 bgcolor=#add8e6>
 	<TD width=30% style="padding-left:103px; font-size: 9pt; padding-top:30px;">User Name:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid; padding-top:30px;">
 	<input type=text name=username id='user_name' maxlength="20"></td>
 	</tr>
-	<TR height=26 bgcolor=#F4F7EC>
-	<TD width=30% style="padding-left:110px; font-size: 9pt; padding-top:30px; padding-bottom: 20px;">Password:</td>
+	<TR height=26 bgcolor=#add8e6>
+	<TD width=30% style="padding-left:110px; font-size: 9pt; padding-bottom: 10px;">Password:</td>
 	<td style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=password name=password  maxlength="15"></td>
 	</tr>
-	<TR height=26 bgcolor=#F4F7EC>
+	<#if model['errorMsg']??>
+	<TR height=26 bgcolor=#add8e6>
+	<TD width=30% style="padding-left:110px; font-size: 9pt; padding-bottom: 10px;"></td>
+	<td style="BORDER-RIGHT:#E6E6E6 1px solid;">	
+	<div id="errordiv" style="color:red;">${model.errorMsg}</div>
+	</td>
+	</tr>
+	</#if>	
+	<TR height=26 bgcolor=#add8e6>
+	<td bgcolor=#add8e6></td>
+	<td style="BORDER-RIGHT:#E6E6E6 1px solid;">
+	<select id= "type" class="commonSelect" name = "type" >	
+							<option value="user" selected>User</option>
+							<option value="employee">Employee</option>
+	</select>
+	</tr>
+	<TR height=26 bgcolor=#add8e6>
 	
-	<td style="BORDER-RIGHT:#fff 1px solid;padding-left: 180px; padding-top: 40px;  margin-left:30px;">
-		</td><TD width=30%><input type="submit"  class="submitButton" value="login"  />
+	<td style="BORDER-RIGHT:#fff 1px solid;padding-left: 180px; padding-top: 10px; padding-bottom: 50px; margin-left:30px;">
+		</td><TD width=30%><input type="submit"  class="submitButton" value="Login"  />
 		&nbsp;&nbsp;&nbsp;<input type="button"  id="signup" name="signup" class="submitButton" value="SignUp"  onClick="redirectPg()"/>
 		</td>
 		</tr>
@@ -90,7 +106,6 @@ $(document).ready(function(){
 	   <script>
 	   myFunction();
 	   </script>
-	  
 	</form>
 
 </div>

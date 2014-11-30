@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ots.beans.LoginInfo;
 import com.ots.beans.UserInfo;
+import com.ots.dao.ClientDAO;
 import com.ots.dao.LoginDAO;
 
 @Controller
@@ -22,6 +23,9 @@ public class LoginController {
 
 	@Autowired
 	LoginDAO loginDAO;
+	
+	@Autowired
+	ClientDAO clientDAO;
 
 	private static final Logger log = Logger.getLogger(LoginController.class);
 	
@@ -41,24 +45,48 @@ public class LoginController {
 		HttpSession session = req.getSession();
 		
 		try{
+			
 			LoginInfo info = new LoginInfo();
 			log.debug("User Name: " +req.getParameter("username"));
 			info.setUserId(req.getParameter("username"));
 			info.setPwd(req.getParameter("password"));
-			UserInfo uInfo = loginDAO.checkLogin(info);
-			if(uInfo == null){
-				log.debug("Invalid credentials!!!");
-				model.addAttribute("errorMsg", "Invalid Credentials");
-				return "login";
-			}
-			log.debug("Client ID: "+ uInfo.getClientId()); 
-			model.addAttribute("uname", uInfo.getfName()+", "+uInfo.getlName());
-			model.addAttribute("usrLvl", uInfo.getLvl());
-			session.setAttribute("clientId", uInfo.getClientId());
-			session.setAttribute("uname", uInfo.getfName()+", "+uInfo.getlName());
-			model.addAttribute("Page", "success");
-			return "main";
 			
+			String type = req.getParameter("type");
+			if(type.equals("user")){
+				UserInfo uInfo = loginDAO.checkLogin(info);
+				if(uInfo == null){
+					log.debug("Invalid credentials!!!");
+					model.addAttribute("errorMsg", "Invalid Credentials!!!");
+					return "login";
+				}
+				//clientDAO.
+				model.addAttribute("curQty", "0");
+				
+				log.debug("Client ID: "+ uInfo.getClientId()); 
+				model.addAttribute("uname", uInfo.getfName()+" "+(uInfo.getlName()==null ? "":uInfo.getlName()));
+				model.addAttribute("usrLvl", uInfo.getLvl());
+				session.setAttribute("clientId", uInfo.getClientId());
+				session.setAttribute("uname", uInfo.getfName()+" "+(uInfo.getlName()==null ? "":uInfo.getlName()));
+				session.setAttribute("userType", "customer");
+				session.setAttribute("usrLvl", uInfo.getLvl());
+				model.addAttribute("Page", "clienthome");
+				
+			} else if(type.equals("employee")){
+				UserInfo uInfo = loginDAO.checkEmplLogin(info);
+				if(uInfo == null){
+					log.debug("Invalid credentials!!!");
+					model.addAttribute("errorMsg", "Invalid Credentials");
+					return "login";
+				}
+				log.debug("System ID: "+uInfo.getClientId());
+				model.addAttribute("uname", uInfo.getfName()+" "+(uInfo.getlName()==null ? "":uInfo.getlName()));
+				session.setAttribute("clientId", uInfo.getClientId());
+				session.setAttribute("uname", uInfo.getfName()+" "+(uInfo.getlName()==null ? "":uInfo.getlName()));
+				session.setAttribute("userType", "customer");
+				model.addAttribute("Page", "success");
+			}
+			
+			return "main";
 		} catch(Exception e){
 			log.error("Error in Login Controller! "+ e);
 		}

@@ -96,113 +96,112 @@ function backFunc(){
 	<table width=470px align=center cellspacing=0 cellpadding=6 style="BORDER:#E6e6e6 1px solid; font-family:'Helvetica,Arial,sans-serif'; font-size: 11pt; color: black;width: 450px;">
 	<TR height=38><TD colspan=3 align=center bgcolor="#636563" style="color:white;">
 	<B>Enter Details</B></TD></TR>
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">First Name:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=fname id='fname' maxlength="20"></td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Last Name:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=lname id='lname' maxlength="20"></td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Password:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=password name=pwd id='pwd' maxlength="20"></td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Confirm Password:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=password name=confirmpwd id='confirmpwd' maxlength="20"></td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>	
+	<TR height=15 bgcolor=#add8e6>	
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Social Security No:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=ssn id='ssn' maxlength="9"></td>
 	</tr>
 
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Address:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=address id='address' maxlength="20"></td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">City:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=city id='city' maxlength="20">
 	</td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">State:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=state id='state' maxlength="20">
 	</td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">ZIP:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=zip id='zip' maxlength="6">
 	</td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Phone no:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=phno id='phno' maxlength="10"></td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Mobile No:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=mobno id='mobno' maxlength="10"></td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Email:</td>
 	<td width=65% style="BORDER-RIGHT:#E6E6E6 1px solid;">
 	<input type=text name=email id='email' maxlength="20"></td>
 	</tr>
 	<tr bgcolor=red>
-	<TD width=50% style="padding-left:141px; font-size: 12pt;">Card Details</td>
-	<td></td>
+	<TD colspan=3 align="center" width=50% style="font-size: 12pt;">Card Details</td>
 	</tr>
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Card Number</td>
 	<td width=65% >
 	<input type=text name=cardno id='cardno' maxlength="16"></td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">Name On Card</td>
 	<td width=65% >
 	<input type=text name=cardname id='cardname' maxlength="20"></td>
 	</tr>
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<td></td>
 	<td style="font-size: 9pt;">&nbsp;Month &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year</td>
 	
 	</tr>
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; padding-top: -5px; font-size: 9pt;">Expiry</td>
 	<td width=5% >
 	<input type=text name=month id='month' maxlength="2" style="width:50px;"> / <input type=text name=year id='year' maxlength="2" style="width:50px;"></td>
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	<TD width=50% style="padding-left:103px; font-size: 9pt;">CVV</td>
 	<td width=65% >
 	<input type=password name=cvv id='cvv' maxlength="3" style="width:50px;">
 	</tr>
 	
-	<TR height=15 bgcolor=#F4F7EC>
+	<TR height=15 bgcolor=#add8e6>
 	
 	<td style="BORDER-RIGHT:#fff 1px solid;padding-left: 180px; padding-top: 40px;  margin-left:30px;">
 		</td><TD width=50%><input type="submit"  class="submitButton" value="Register"  />

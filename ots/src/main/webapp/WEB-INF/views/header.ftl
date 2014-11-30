@@ -7,12 +7,17 @@
  	</head>
  	<script>
  	$(document).ready(function(){
- 	  					
+ 	<#if model['uname']??>
+ 	 
+ 	 <#else>
+	location.href="login.html";
+	</#if>
   	});	
  	</script>
  <body>
  <div id="headerdiv">
 	<div class="container">
+	<br/>
 		 <div class="dropdown">
         <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Tutorials
         <span class="caret"></span></button>
@@ -23,13 +28,17 @@
           <li role="presentation" class="divider"></li>
           <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
         </ul>
-      </div>
-    </div>
-		<div style="float:right;">
+     
+      		<div style="float:right; color:yellow; padding-left: 20px;">
 		      <span id="welcome">Welcome ${uname}
 			    </span>
-			     <span id="logout" ><a href="login.html">Logout</a></span>
-		</div>	    
+			     <span id="logout" style="padding-left: 10px;"><a href="login.html">Logout</a></span>
+ 			</div>
+ 		
+		</div>
+		<br/>	    
+	
+    </div>
 	
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	</div>
