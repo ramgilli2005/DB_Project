@@ -61,6 +61,17 @@ public class ClientDAO {
 		catch(Exception e){
 			log.error("Error in payment "+e);
 		}
+		
+		query = "update `Transaction` set `Txn_Cost_Paid` = " + payment.getRemainingBalance() + " "
+				+ "where `txn_id` = " + payment.getTxn_id() + ";";
+		
+		try{
+			MySqlExecute.executeUpdateMySqlQuery(query);
+		}
+		catch(Exception e){
+			log.error("Error in deducting cost paid in transaction after payment "+e);
+		}
+		
 	}
 	
 	//View pending transactions
@@ -77,24 +88,28 @@ public class ClientDAO {
 	}
 	
 	//View all past transactions
-	public void ViewTxns(){
-		String query = 
+	public ResultSet ViewTxns(String clientId){
+		String query = "select * from transaction_log where `txn_log_client_id` = " + clientId + ";";
 		try{
-			
+			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
+			return rs;
 		}
 		catch(Exception e){
 			log.error("Error in fetching transactions "+e);
+			return null;
 		}
 	}
 	
 	//View oil and cash reserves
-	public void ViewOilCashReserves(){
-		String query = 
+	public ResultSet ViewOilCashReserves(String clientId){
+		String query = "select * from clientdbo where `clientdbo_id` = "+clientId+";";
 		try{
-			
+			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
+			return rs;
 		}
 		catch(Exception e){
 			log.error("Error in fetching oil and cash reserves "+e);
+			return null;
 		}
 	}
 }

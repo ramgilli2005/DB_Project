@@ -5,7 +5,21 @@ public class PaymentForTxn {
 	private double paymentAmount;
 	private String txnId;
 	private String clientId;
+	private double remainingBalance;
+	private int txn_id;
 	
+	public double getRemainingBalance() {
+		return remainingBalance;
+	}
+	public void setRemainingBalance(double remainingBalance) {
+		this.remainingBalance = remainingBalance;
+	}
+	public int getTxn_id() {
+		return txn_id;
+	}
+	public void setTxn_id(int txn_id) {
+		this.txn_id = txn_id;
+	}
 	public String getClientId() {
 		return clientId;
 	}
