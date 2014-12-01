@@ -38,8 +38,8 @@ $(document).ready(function(){
 		<TR bgcolor=orange>
 		<TD style="color:green; padding-left: 50px; padding-top: 10px; ">
 		<select id= "ordertype" class="commonSelect" name = "ordertype" >
-							<option value="buy" selected>BUY</option>
-							<option value="sell">SELL</option>
+							<option value="BUY" selected>BUY</option>
+							<option value="SELL">SELL</option>
 		</select>
 		</TD>
 		<TD colspan=2 style="padding-top: 10px;">
@@ -52,8 +52,8 @@ $(document).ready(function(){
 		</TD>
 		<TD colspan=2 style="padding-top: 10px; padding-bottom: 15px;">
 		<select id= "commsntype" class="commonSelect" name = "commsntype" >
-							<option value="buy" selected>CASH</option>
-							<option value="sell">OIL</option>
+							<option value="CASH" selected>CASH</option>
+							<option value="OIL">OIL</option>
 		</select>
 		
 		</TD>						

@@ -13,9 +13,13 @@
 <body>
 
     <div align="left">
-		<H1>Payment Succeeded Created!!!</h1>
+		<#if model['errorMsg']??>
+			<div id="errordiv" style="color:red;">${model.errorMsg}</div>
+		<#else>
+			<H1> Payment Succesfull!!! </H1>			
+		</#if>	
 		
-		<a href="login.html">Login</a>	 
+		<a href="clienthome.html">Client Home</a>	 
 	</div>
 
 </body>

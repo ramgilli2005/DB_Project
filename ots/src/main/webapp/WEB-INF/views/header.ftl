@@ -7,10 +7,10 @@
  	</head>
  	<script>
  	$(document).ready(function(){
- 	<#if model['uname']??>
- 	 
+ 	<#if Session['clientId']??>
+
  	 <#else>
-	//location.href="login.html";
+	location.href="login.html";
 	</#if>
   	});	
  	</script>

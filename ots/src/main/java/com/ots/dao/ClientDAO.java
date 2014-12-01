@@ -20,19 +20,27 @@ public class ClientDAO {
 	static final Logger log = Logger.getLogger(ClientDAO.class);
 
 	//Initiate transaction
-	public void makeTxn (Txn txn) {
-
+	public int makeTxn (Txn txn) {
+		int txnId = -1;
 		String query = "insert into transaction (`Txn_quantity`, `Txn_type`, `Txn_comsn_type`,"
-					+ "`Txn_Client_Id`, `Txn_total_comsn`, `Txn_cost`) values"
+					+ "`Txn_Client_Id`, `Txn_total_comsn`, `Txn_cost`, `Txn_cost_paid`) values"
 					+ "("+txn.getQuantity()+",'"+txn.getType()+"','"+txn.getComsnType()+"','"
-					+txn.getClientId()+"',"+txn.getTotalComsn()+","+txn.getTxnCost()+")";
-
+					+txn.getClientId()+"',"+txn.getTotalComsn()+","+txn.getTxnCost()+", 0.0)";
+		log.debug("Txn Query: "+query);
+		String txnIdQuery = "Select LAST_INSERT_ID()";
 		try {
 			MySqlExecute.executeUpdateMySqlQuery(query);
+			ResultSet rs = MySqlExecute.executeMySqlQuery(txnIdQuery);
+			
+			while(rs.next()){
+				txnId = rs.getInt(1);
+			}
+			return txnId;
 		} 
 		catch (Exception e) {
 			log.error("Error in creating transation " + e);
 		}
+		return txnId;
 	}
 	
 	//Can use the method view oil cash reserves. check in controller itself whether the amount n 
@@ -58,8 +66,9 @@ public class ClientDAO {
 	
 	//Make payment for transaction
 	public void Payment(PaymentForTxn payment){
-		String query = "insert into `payment_info` (`Payment_amount`,`Payment_txn_id`)"
-				+ " values ("+payment.getPaymentAmount()+","+payment.getTxnId()+",'" +payment.getClientId()+ ");";
+		double costPaid = 0.0;
+		String query = "insert into `payment_info` (`Payment_amount`,`Payment_txn_id`, `Payment_Client_Id`)"
+				+ " values ("+payment.getPaymentAmount()+","+payment.getTxnId()+",'" +payment.getClientId()+ "');";
 		
 		try{
 			MySqlExecute.executeUpdateMySqlQuery(query);
@@ -68,7 +77,20 @@ public class ClientDAO {
 			log.error("Error in payment "+e);
 		}
 		
-		query = "update `Transaction` set `Txn_Cost_Paid` = "+payment.getRemainingBalance()+"where `txn_id` = "+payment.getTxnId() + ";";
+		query = "select txn_cost_paid from transaction where txn_Id = " + payment.getTxnId();
+		
+		try{
+			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
+			while(rs.next()){
+				costPaid = rs.getDouble(1);
+			}
+		}
+		catch(Exception e){
+			log.error("Error while fetching cost paid for transaction" + e);
+		}
+		
+		costPaid += payment.getPaymentAmount();
+		query = "update `Transaction` set `Txn_Cost_Paid` = " + costPaid + "where `txn_id` = "+payment.getTxnId() + ";";
 		
 		try{
 			MySqlExecute.executeUpdateMySqlQuery(query);
@@ -77,6 +99,61 @@ public class ClientDAO {
 			log.error("Error in deducting cost paid in transaction after payment "+e);
 		}
 	}
+	
+	// Payment using credit balance of client in OTS
+	public boolean PayUsingCredit(double creditAmount, PaymentForTxn payment) {
+		double costPaid = 0.0;
+		double balanceCredit = creditAmount - payment.getPaymentAmount();
+		if(balanceCredit >= 0){
+			String query = "update clientDbo set clientdbo_credit = "
+					+ balanceCredit + " where clientdbo_Id = " + payment.getClientId();
+			try {
+				MySqlExecute.executeUpdateMySqlQuery(query);
+			} catch (Exception e) {
+				log.error("Error occurred during payment from credit" + e);
+			}
+			
+			query = "insert into `payment_info` (`Payment_amount`,`Payment_txn_id`, `Payment_Client_Id`)"
+					+ " values ("+payment.getPaymentAmount()+","+payment.getTxnId()+",'" +payment.getClientId()+ "');";
+			
+			try{
+				MySqlExecute.executeUpdateMySqlQuery(query);
+			}
+			catch(Exception e){
+				log.error("Error in payment "+e);
+			}
+			
+			query = "select txn_cost_paid from transaction where txn_Id = " + payment.getTxnId();
+			
+			try{
+				ResultSet rs = MySqlExecute.executeMySqlQuery(query);
+				while(rs.next()){
+					costPaid = rs.getDouble(1);
+				}
+			}
+			catch(Exception e){
+				log.error("Error while fetching cost paid for transaction" + e);
+			}
+			
+			costPaid += payment.getPaymentAmount();
+			query = "update `Transaction` set `Txn_Cost_Paid` = " + costPaid + "where `txn_id` = "+payment.getTxnId() + ";";
+			
+			try{
+				MySqlExecute.executeUpdateMySqlQuery(query);
+			}
+			catch(Exception e){
+				log.error("Error in deducting cost paid in transaction after payment "+e);
+			}
+			
+			return true;
+
+		} else {
+			return false;
+			
+		}
+		
+	}
+	
 	
 	//View pending transactions
 	public List<Txn> ViewPendingTxn(String clientId){
@@ -218,27 +295,65 @@ public class ClientDAO {
 	}
 	
 	//View oil and cash reserves
-	public List<ClientDbo> ViewOilCashReserves(String clientId){
+	public ClientDbo ViewOilCashReserves(String clientId){
 		String query = "select * from clientdbo where `clientdbo_id` = '"+clientId+"';";
 		try{
+			log.debug("ClientId: "+clientId);
 			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
-			if(rs.next()){
-				ClientDbo cdbo = new ClientDbo();
-				List<ClientDbo> cdbos = new ArrayList<ClientDbo>();
-				while(rs.next()){
+			ClientDbo cdbo = new ClientDbo();
+			while(rs.next()){
 					cdbo.setClientId(clientId);
 					cdbo.setQuantiy(rs.getDouble("Clientdbo_quantity"));
 					cdbo.setCredit(rs.getDouble("Clientdbo_credit"));
-					cdbos.add(cdbo);
-				}
-				return cdbos;
+					return cdbo;
 			}
-			else
-				return null;
+			log.debug("Returning Null");
+			return null;
 		}
 		catch(Exception e){
 			log.error("Error in fetching oil and cash reserves "+e);
 			return null;
 		}
+	}
+	
+	public double getOilPrice(){
+		double oilPrice = 0.0; 
+		String query = "Select * from oilprice Order By Op_date Desc Limit 1";
+		try{
+			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
+			while(rs.next()){
+				oilPrice = rs.getDouble("Op_price");
+			}
+		} catch(Exception e){
+			log.error("Error in fetching oil price");
+		}
+		return oilPrice;
+	}
+	
+	public Txn getClientTxn(int txnId){
+		Txn txn;
+		String query = "Select * from transaction where Txn_Id="+txnId;
+		
+		try{
+			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
+			while(rs.next()){
+				txn = new Txn();
+				txn.setTxnId(rs.getInt("Txn_Id"));
+				txn.setTxnDate(rs.getDate("Txn_date"));
+				txn.setQuantity(rs.getDouble("Txn_quantity"));
+				txn.setType(rs.getString("Txn_type"));
+				txn.setComsnType(rs.getString("Txn_comsn_type"));
+				txn.setClientId(rs.getString("Txn_Client_Id"));
+				txn.setTotalComsn(rs.getDouble("Txn_total_comsn"));
+				txn.setTxnCost(rs.getDouble("Txn_cost"));
+				txn.setTxnCostPaid(rs.getDouble("Txn_cost_paid"));
+				txn.setTraderId(rs.getString("Txn_Trader_Id"));
+				
+				return txn;
+			}
+		} catch(Exception e){
+			log.error("Error in fetching txn details");
+		}
+		return null;
 	}
 }

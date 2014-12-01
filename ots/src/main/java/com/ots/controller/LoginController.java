@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.ots.beans.ClientDbo;
 import com.ots.beans.LoginInfo;
 import com.ots.beans.UserInfo;
 import com.ots.dao.ClientDAO;
@@ -59,10 +60,13 @@ public class LoginController {
 					model.addAttribute("errorMsg", "Invalid Credentials!!!");
 					return "login";
 				}
-				//clientDAO.
-				model.addAttribute("curQty", "0");
+				
 				
 				log.debug("Client ID: "+ uInfo.getClientId()); 
+				String clientId = uInfo.getClientId();
+				ClientDbo clientDbo = clientDAO.ViewOilCashReserves(clientId);
+				log.debug((null != clientDbo ? clientDbo.getQuantiy() : "null obj"));
+				model.addAttribute("curQty", (null != clientDbo ? clientDbo.getQuantiy() : "0"));
 				model.addAttribute("uname", uInfo.getfName()+" "+(uInfo.getlName()==null ? "":uInfo.getlName()));
 				model.addAttribute("usrLvl", uInfo.getLvl());
 				session.setAttribute("clientId", uInfo.getClientId());

@@ -25,7 +25,7 @@ function transactRedirect(){
 
 </head>
 <body >
-	<span align="left" style="padding-left: 40px;">Place Order Preview</span><br/>
+	<span align="left" style="padding-left: 40px;color: red ">Place Order Sucess!!!</span><br/>
    <div align="center" style="color: orange;">
  	<form name="myform" method="POST" action="payment.html"  >	
 	<table align=LEFT cellspacing=0 cellpadding=6 style="BORDER:#E6e6e6 10px solid; font-family:'Helvetica,Arial,sans-serif'; font-size: 13pt; margin-top: 18px; margin-left: 40px; color: black;width: 450px;">
@@ -52,20 +52,34 @@ function transactRedirect(){
 		</TR>
 		<TR bgcolor="orange">
 		<TD style="color:green; padding-left: 50px; padding-top: 10px; " >
+		<#if model['commsntype'] = "CASH">
 		Commission Amount:
+		<#elseif model['commsntype'] = "OIL">
+		Commission in Oil:
+		</#if>
 		</TD>
 		<TD colspan=2 style="padding-top: 10px; padding-bottom: 15px;">
 		<input type=text id="commsnamt" style="width:70px;" name=commsnamt <#if model['commsnamt']??>value="${model.commsnamt}"</#if> readonly />		
 		</TD>						
 		</TR>
+		<TR bgcolor="orange">
+		<TD style="color:green; padding-left: 50px; padding-top: 10px; " >
+		Transaction Cost:
+		</TD>
+		<TD colspan=2 style="padding-top: 10px; padding-bottom: 15px;">
+		<input type=text id="txncost" style="width:70px;" name=txncost <#if model['txnCost']??>value="${model.txnCost}"</#if> readonly />		
+		</TD>						
+		</TR>
 		<TR bgcolor="orange" >
 		<TD colspan=2 align="center" style="padding-left: 50px; padding-top: 10px; padding-bottom: 15px;" >
-		<input type=submit class="submitButton" value="Pay Now" />
+		<input class="submitButton" id="paynow" name="paynow" type="submit" value="Pay Now" >
+		
 		</TD>
 		<TD colspan=2 align="center" style="padding-top: 10px; padding-bottom: 15px;" >
 		<input type="button" class="submitButton" value="Pay Later" onClick="transactRedirect()"/>
 		</TD>
 		</TR>
 	</table>
-<input type=type id="transactionId" name=transactionId style="display:none;" <#if model['transactionId']??>value="${model.transactionId}</#if> "/>
+	<input type="hidden" id="cardcash" name="cardcash" >
+	<input type=hidden id="transactionId" name=transactionId style="display:none;" <#if model['txnId']??>value="${model.txnId}"</#if> />
 </body>

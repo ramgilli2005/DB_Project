@@ -15,7 +15,8 @@ function logincheck(){
 	}
 }
 $(document).ready(function(){
-
+	//alert("${model.clientId}");
+	$("#clientId").val("${model.clientId}");	
 });
 
 function backFunc(){
@@ -54,10 +55,22 @@ function backFunc(){
 		</TR>
 		<TR bgcolor="orange">
 		<TD style="color:green; padding-left: 50px; padding-top: 10px; " >
+		<#if model['commsntype'] = "CASH">
 		Commission Amount:
+		<#elseif model['commsntype'] = "OIL">
+		Commission in Oil:
+		</#if>
 		</TD>
 		<TD colspan=2 style="padding-top: 10px; padding-bottom: 15px;">
 		<input type=text id="commsnamt" style="width:70px;" name=commsnamt <#if model['commsnamt']??>value="${model.commsnamt}"</#if> readonly />		
+		</TD>						
+		</TR>
+		<TR bgcolor="orange">
+		<TD style="color:green; padding-left: 50px; padding-top: 10px; " >
+		Transaction Cost:
+		</TD>
+		<TD colspan=2 style="padding-top: 10px; padding-bottom: 15px;">
+		<input type=text id="txncost" style="width:70px;" name=txncost <#if model['txnCost']??>value="${model.txnCost}"</#if> readonly />		
 		</TD>						
 		</TR>
 		<TR bgcolor="orange" >
@@ -68,7 +81,11 @@ function backFunc(){
 		<input type="button"  class="submitButton" onClick="backFunc()" value="Cancel"  /></td>
 		</TR>
 	</table>
+	
 	<input type="hidden" name="clientId" id="clientId" <#if model[clientId]??>value="${model.clientId}"</#if> >
 	</form>	
+	<#if model['errorMsg']??>
+		<div id="errordiv" style="color:red;">${model.errorMsg}</div>
+	</#if>
 
 </body>

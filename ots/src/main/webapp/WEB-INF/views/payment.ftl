@@ -7,33 +7,97 @@
 
 <script>
 function doPayCard() {
-		document.getElementById("approvecancel").value="card";
-		document.form.submit();
+		if(confirm('Are you sure you want to pay by Card?')){
+			var a=document.form.txncost.value;
+			var b=document.form.txncostpd.value;
+			var x=document.form.pymntamt.value;
+			if((b+x) > a){
+				alert("Overpaying is not allowed right now!");
+				return;
+			}		
+			document.getElementById("creditcard").value="card";
+			document.form.submit();
+		}
 	}
 	function doPayCredit() {
-		document.getElementById("approvecancel").value="credit";
-		document.form.submit();
+		if(confirm('Are you sure you want to pay from Credit?')){
+			var a=document.form.txncost.value;
+			var b=document.form.txncostpd.value;
+			var x=document.form.pymntamt.value;
+			var y=document.form.creditAmt.value;
+			if(x > y){
+				alert("Payment cannot be higher than credit!!!");
+				return;
+			} else {
+				if((b+y) > a){
+					alert("Overpaying is not allowed right now!");
+					return;
+				}
+				document.getElementById("creditcard").value="credit";
+				document.form.submit();
+			}
+			
+			
+		}
+		
 	}
+function transactRedirect(){
+	location.href="clienthome.html";
+}
 </script>
 </head>
 <body>
 <@springform.form modelAttribute="model" name="form" method="POST" action="txnpayment.html">
 <div style="width:676px;height:350px;overflow-x:hidden; overflow-y:auto; font-family: 'Lucida Grande'; font-size: 12pt; color: blue;">
-			<table class="altrowstable" id="alternatecolor" >
+	<table align=LEFT cellspacing=0 cellpadding=6 style="BORDER:#E6e6e6 10px solid; font-family:'Helvetica,Arial,sans-serif'; font-size: 13pt; margin-top: 18px; margin-left: 40px; color: black;width: 450px;">
 						
-						<tr  class="oddrowcolor">
-						<td style="width:20px; padding:  0px;"></td>
-						</tr>
-						
+		<TR bgcolor="orange">
+		<TD style="color:green; padding-left: 50px; padding-top: 10px; " >
+		Transaction Cost:
+		</TD>
+		<TD colspan=2 style="padding-top: 10px; padding-bottom: 15px;">
+		<input type=text id="txncost" style="width:70px;" name=txncost <#if model['txnCost']??>value="${model.txnCost}"</#if> readonly />		
+		</TD>						
+		</TR>
+		<TR bgcolor="orange">
+		<TD style="color:green; padding-left: 50px; padding-top: 10px; " >
+		Transaction Cost Paid Till Now:
+		</TD>
+		<TD colspan=2 style="padding-top: 10px; padding-bottom: 15px;">
+		<input type=text id="txncostpd" style="width:70px;" name=txncostpd <#if model['costPaid']??>value="${model.costPaid}"</#if> readonly />		
+		</TD>						
+		</TR>
+		<TR bgcolor="orange">
+		<TD style="color:green; padding-left: 50px; padding-top: 10px; " >
+		Your Current Credit:
+		</TD>
+		<TD colspan=2 style="padding-top: 10px; padding-bottom: 15px;">
+		<input type=text id="creditAmt" style="width:70px;" name=creditAmt <#if model['txnCost']??>value="${model.creditAmt}"</#if> readonly />		
+		</TD>						
+		</TR>
+		<TR bgcolor="orange">
+		<TD style="color:green; padding-left: 50px; padding-top: 10px; " >
+		Payment Amount:
+		</TD>
+		<TD colspan=2 style="padding-top: 10px; padding-bottom: 15px;">
+		<input type=text id="pymntamt" style="width:70px;" name=pymntamt />		
+		</TD>						
+		</TR>
+		
+		<TR bgcolor="orange" >
+		<TD colspan=2 align="center" style="padding-left: 50px; padding-top: 10px; padding-bottom: 15px;" >
+		<input class="submitButton" id="delete" name="delete" type="button"  value="Pay By Card" onClick="doPayCard()" >
+		<input class="submitButton" id="delete" name="delete" type="button"  value="Pay By Credit" onClick="doPayCredit()" >
+		
+		</TD>
+		<TD colspan=2 align="center" style="padding-top: 10px; padding-bottom: 15px;" >
+		<input type="button" class="submitButton" value="Pay Later" onClick="transactRedirect()"/>
+		</TD>
+		</TR>					
 				
-			</table>
-			
-			<div align="left">
-				<br/>
-				<input class="submitButton" id="delete" name="delete" type="submit"  value="Pay By Card" >
-				<input class="submitButton" id="delete" name="delete" type="button"  value="Pay By Credit" onclick="creditPay()">
-				
-			</div>
+	</table>
+	<input type="hidden" id="creditcard" name="creditcard">
+	<input type="hidden" id="transactionId" name="transactionId" <#if model['txnId']??> value="${model.txnId}" </#if> >			
 		</div>
 </@springform.form> 
 </body>
