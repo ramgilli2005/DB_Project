@@ -43,26 +43,23 @@ public class ClientDAO {
 		return txnId;
 	}
 	
-	//Can use the method view oil cash reserves. check in controller itself whether the amount n 
-	//clientdbo is greater than the amount of oil to be sold
-	
-	//Check if oil reserves are sufficient
-	/*public boolean CheckOilReserves(ClientDbo cdbo) {
-		//String query = "SELECT `Clientdbo_quantity` FROM `clientdbo` WHERE clientdbo_id = '" + + "';";
+	// Check if oil reserves are sufficient
+	public boolean CheckOilReserves(String clientId, double txnquantity) {
+		String query = "SELECT `Clientdbo_quantity` FROM `clientdbo` WHERE clientdbo_id = '"
+				+ clientId + "';";
+		ClientDbo cdbo = ViewOilCashReserves(clientId);
 		try {
 			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
-			if (cdbo.getQuantiy() > txnamnt) {
-				log.debug("Oil reserves = "+rs.getDouble(1));
+			if (cdbo.getQuantiy() > txnquantity) {
+				log.debug("Oil reserves = " + rs.getDouble(1));
 				return true;
-			}
-			else
+			} else
 				return false;
-		} 
-		catch (Exception e) {
-			log.error("Error in checking oil reserves "+e);
+		} catch (Exception e) {
+			log.error("Error in checking oil reserves " + e);
 			return false;
 		}
-	}*/
+	}
 	
 	//Make payment for transaction
 	public void Payment(PaymentForTxn payment){
