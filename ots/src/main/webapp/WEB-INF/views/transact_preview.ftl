@@ -28,7 +28,7 @@ function backFunc(){
 <body >
 	<span align="left" style="padding-left: 40px;">Place Order Preview</span><br/>
    <div align="center" style="color: orange;">
- 	
+	 	
 	<form name="myform" method="POST" action="placeorder.html" onsubmit="return logincheck()" >
 	<table align=LEFT cellspacing=0 cellpadding=6 style="BORDER:#E6e6e6 10px solid; font-family:'Helvetica,Arial,sans-serif'; font-size: 13pt; margin-top: 18px; margin-left: 40px; color: black;width: 450px;">
 		<TR bgcolor=orange >	
@@ -68,6 +68,7 @@ function backFunc(){
 		<input type="button"  class="submitButton" onClick="backFunc()" value="Cancel"  /></td>
 		</TR>
 	</table>
+	<input type="hidden" name="clientId" id="clientId" <#if model[clientId]??>value="${model.clientId}"</#if> >
 	</form>	
 
 </body>

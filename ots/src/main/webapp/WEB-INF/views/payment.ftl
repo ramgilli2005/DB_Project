@@ -6,7 +6,14 @@
 <title>WELCOME TO OTS</title>
 
 <script>
-
+function doPayCard() {
+		document.getElementById("approvecancel").value="card";
+		document.form.submit();
+	}
+	function doPayCredit() {
+		document.getElementById("approvecancel").value="credit";
+		document.form.submit();
+	}
 </script>
 </head>
 <body>
