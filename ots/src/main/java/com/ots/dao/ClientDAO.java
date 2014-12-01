@@ -157,28 +157,26 @@ public class ClientDAO {
 	
 	//View pending transactions
 	public List<Txn> ViewPendingTxn(String clientId){
-		String query = "select * from transaction where `Txn_Client_Id` = " + clientId + ";";
-		try{
+		String query = "select * from transaction where `Txn_Client_Id` = '" + clientId + "';";
+		log.debug("Query: "+query);
+		try {
 			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
-			if(rs.next()){
-				Txn txn = new Txn();
-				List<Txn> txns= new ArrayList<Txn>();
-				while(rs.next()){
-					txn.setTxnId(rs.getInt(1));
-					txn.setTxnDate(rs.getDate(2));
-					txn.setQuantity(rs.getDouble(3));
-					txn.setType(rs.getString(4));
-					txn.setComsnType(rs.getString(5));
-					txn.setClientId(rs.getString(6));
-					txn.setTotalComsn(rs.getDouble(7));
-					txn.setTxnCost(rs.getDouble(8));
-					txn.setTxnCostPaid(rs.getDouble(9));
-					txns.add(txn);
-				}
-				return txns;
+			Txn txn;
+			List<Txn> txns = new ArrayList<Txn>();
+			while (rs.next()) {
+				txn = new Txn();
+				txn.setTxnId(rs.getInt(1));
+				txn.setTxnDate(rs.getDate(2));
+				txn.setQuantity(rs.getDouble(3));
+				txn.setType(rs.getString(4));
+				txn.setComsnType(rs.getString(5));
+				txn.setClientId(rs.getString(6));
+				txn.setTotalComsn(rs.getDouble(7));
+				txn.setTxnCost(rs.getDouble(8));
+				txn.setTxnCostPaid(rs.getDouble(9));
+				txns.add(txn);
 			}
-			else
-				return null;
+			return txns;
 		}
 		catch(Exception e){
 			log.error("Error in fetching pending transactions "+e);
@@ -206,8 +204,9 @@ public class ClientDAO {
 			log.error("Error in deleting payment for that transaction " + e);
 		}
 		
-		query = "update clientdbo set clientdbo_quantity = " + txninfo.getTxnamnt()
-				+ "where clientdbo_id = '" + txninfo.getClientId() + "';";
+		query = "update clientdbo set clientdbo_quantity = " + txninfo.getQty()
+				+ " , clientdbo_credit= "+txninfo.getCreditAmt()+" where clientdbo_id = '" 
+				+ txninfo.getClientId() + "';";
 		try{
 			MySqlExecute.executeUpdateMySqlQuery(query);
 		}
@@ -218,9 +217,9 @@ public class ClientDAO {
 	
 	//Insert into transaction log after deleting from transaction
 	public void InsertIntoTxnLog(TxnLog txnlog){
-		String query = "insert into transaction_log (`Txn_Log_Id`,`Txn_Log_Client_Id`,`Txn_Log_Date`,`Txn_Log_Quantity`, `Txn_Log_Type`,"
+		String query = "insert into transaction_log (`Txn_Log_Client_Id`,`Txn_Log_Date`,`Txn_Log_Quantity`, `Txn_Log_Type`,"
 				+ " `Txn_Log_Commission_Type`, `Txn_Log_status`, `Txn_log_Trader_id`, `Txn_log_cost`, `Txn_log_total_comsn`) "
-				+ "values (" + txnlog.getTxnLogId() + ",'" +txnlog.getClientId() + "'," + txnlog.getTxnDate() + ","
+				+ "values ('" +txnlog.getClientId() + "'," + txnlog.getTxnDate() + ","
 				+txnlog.getQuantity() + ",'" + txnlog.getTxnType() + "','" + txnlog.getComsnType() + "','"	
 				+txnlog.getLogStatus() + "','" + txnlog.getTraderId()+ "'," +txnlog.getTxnCost() +","+ txnlog.getComsnCost() +")";
 		
@@ -238,10 +237,11 @@ public class ClientDAO {
 				+ "and payment client_id = '" + txninfo.getClientId() +"';";
 		try{
 			List<PaymentForTxn> payments = new ArrayList<PaymentForTxn>();
-			PaymentForTxn payment = new PaymentForTxn();
+			PaymentForTxn payment;
 			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
 			if(rs.next()){
 				while(rs.next()){
+					payment = new PaymentForTxn();
 					payment.setPaymentId(rs.getInt(1));
 					payment.setPaymentDate(rs.getDate(2));
 					payment.setPaymentAmount(rs.getDouble(3));
@@ -269,8 +269,9 @@ public class ClientDAO {
 			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
 			if(rs.next()){
 				List<TxnLog> txnlogs = new ArrayList<TxnLog>();
-				TxnLog txnlog = new TxnLog();
+				TxnLog txnlog;
 				while(rs.next()){
+					txnlog = new TxnLog();
 					txnlog.setTxnLogId(rs.getInt("txn_log_id"));
 					txnlog.setClientId(rs.getString("txn_log_client_id"));
 					txnlog.setTxnDate(rs.getDate("txn_log_date"));
@@ -330,9 +331,9 @@ public class ClientDAO {
 		return oilPrice;
 	}
 	
-	public Txn getClientTxn(int txnId){
+	public Txn getClientTxn(int txnId, String clientId){
 		Txn txn;
-		String query = "Select * from transaction where Txn_Id="+txnId;
+		String query = "Select * from transaction where Txn_Id="+txnId+ " and Txn_Client_Id='"+clientId+"'";
 		
 		try{
 			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
@@ -355,5 +356,44 @@ public class ClientDAO {
 			log.error("Error in fetching txn details");
 		}
 		return null;
+	}
+	public boolean cancelTxn(List<Integer> txnIdList, String clientId, String cancellerId){
+		boolean b = false;
+		try{
+			//Cancel txn from Transaction table and if txn_paid > 0 credit it to the client
+			for(Integer txnId : txnIdList){
+				Txn txn = getClientTxn(txnId, clientId);
+				TxnInfo txnInfo = new TxnInfo();
+				txnInfo.setTxnId(txn.getTxnId());
+				txnInfo.setClientId(txn.getClientId());
+				ClientDbo cdbo = ViewOilCashReserves(clientId);
+				
+				//Provide the updated quantity
+				double qty = cdbo.getQuantiy() - txn.getQuantity();
+				txnInfo.setQty(qty);
+				
+				double creditAmt = cdbo.getCredit() + txn.getTxnCostPaid();
+				txnInfo.setCreditAmt(creditAmt);
+				
+				DeleteTxn(txnInfo);
+				
+				TxnLog txnLog = new TxnLog();
+				txnLog.setClientId(txn.getClientId());
+				txnLog.setComsnCost(txn.getTotalComsn());
+				txnLog.setComsnType(txn.getComsnType());
+				txnLog.setLogStatus("CANCELLED");
+				txnLog.setQuantity(txn.getQuantity());
+				txnLog.setTraderId(cancellerId);
+				txnLog.setTxnCost(txn.getTxnCost());
+				txnLog.setTxnType(txn.getType());
+				txnLog.setTxnDate(txn.getTxnDate());
+				InsertIntoTxnLog(txnLog);
+			}
+			
+		} catch(Exception e){
+			
+		}
+		
+		return b;
 	}
 }

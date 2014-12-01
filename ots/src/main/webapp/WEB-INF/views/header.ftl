@@ -14,20 +14,51 @@
 	</#if>
   	});	
  	</script>
+ 	<style>
+ 	#div2 {
+ 		top: -34px;
+ 		left: 85px;
+ 		height: 0px;
+ 	}
+ 	</style>
  <body>
  <div id="headerdiv">
 	<div class="container">
 	<br/>
-		 <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Tutorials
+		 <div class="dropdown"id="div1" >
+        <#if Session["userType"] = "customer">
+		<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Client
         <span class="caret"></span></button>
+		
         <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="clienthome.html">Trades</a></li>
           <li role="presentation" class="divider"></li>
           <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
         </ul>
+		</div>
+		 <div class="dropdown" id="div2">
+        <button class="btn btn-default dropdown-toggle" type="button" id="menu2" data-toggle="dropdown">Transactions
+        <span class="caret"></span></button>
+		
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu2">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="clienttxn.html">Transactions</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
+        </ul>
+        </div>
+        </#if>
+		<#if Session["Sys_Position"]??>
+		<#if Session["Sys_Position"] = "trader">
+		 <div class="dropdown">
+		<button class="btn btn-default dropdown-toggle" type="button" id="menu3" data-toggle="dropdown">Trader
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu3">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="tamhome.html">Trader Home</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
+        </ul>
+        </#if>
+		</#if>
      
       		<div style="float:right; color:yellow; padding-left: 20px;">
 		      <span id="welcome">Welcome ${uname}

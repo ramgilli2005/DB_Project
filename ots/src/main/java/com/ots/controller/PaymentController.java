@@ -40,7 +40,7 @@ public class PaymentController {
 		String clientId = (String)session.getAttribute("clientId");
 		ClientDbo clientDbo = clientDAO.ViewOilCashReserves(clientId);
 		int txnId = Integer.parseInt(req.getParameter("transactionId"));
-		Txn txnDetails = clientDAO.getClientTxn(txnId);
+		Txn txnDetails = clientDAO.getClientTxn(txnId, clientId);
 		model.addAttribute("creditAmt", clientDbo.getCredit());
 		model.addAttribute("txnId", txnId);
 		model.addAttribute("costPaid", (null != txnDetails ? txnDetails.getTxnCostPaid() : "0"));

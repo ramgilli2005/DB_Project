@@ -6,6 +6,7 @@ html, body {
 
 #headerdiv {
 	background: green;
+	height: 75px;
 }
 
 #mainpage {

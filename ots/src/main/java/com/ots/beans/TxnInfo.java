@@ -5,7 +5,21 @@ public class TxnInfo {
 	private int txnId;
 	private String clientId;
 	private double txnamnt;
+	private double creditAmt;
+	public double getCreditAmt() {
+		return creditAmt;
+	}
+	public void setCreditAmt(double creditAmt) {
+		this.creditAmt = creditAmt;
+	}
+	private double qty;
 	
+	public double getQty() {
+		return qty;
+	}
+	public void setQty(double qty) {
+		this.qty = qty;
+	}
 	public double getTxnamnt() {
 		return txnamnt;
 	}
