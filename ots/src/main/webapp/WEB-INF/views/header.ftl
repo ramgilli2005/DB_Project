@@ -42,6 +42,7 @@
 		
         <ul class="dropdown-menu" role="menu" aria-labelledby="menu2">
           <li role="presentation"><a role="menuitem" tabindex="-1" href="clienttxn.html">Transactions</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="clienttxnhist.html">Transaction History</a></li>
           <li role="presentation" class="divider"></li>
           <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
         </ul>

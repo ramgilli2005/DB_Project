@@ -22,18 +22,27 @@ public class ClientDAO {
 	//Initiate transaction
 	public int makeTxn (Txn txn) {
 		int txnId = -1;
+		
 		String query = "insert into transaction (`Txn_quantity`, `Txn_type`, `Txn_comsn_type`,"
 					+ "`Txn_Client_Id`, `Txn_total_comsn`, `Txn_cost`, `Txn_cost_paid`) values"
 					+ "("+txn.getQuantity()+",'"+txn.getType()+"','"+txn.getComsnType()+"','"
 					+txn.getClientId()+"',"+txn.getTotalComsn()+","+txn.getTxnCost()+", 0.0)";
 		log.debug("Txn Query: "+query);
 		String txnIdQuery = "Select LAST_INSERT_ID()";
+		
 		try {
 			MySqlExecute.executeUpdateMySqlQuery(query);
 			ResultSet rs = MySqlExecute.executeMySqlQuery(txnIdQuery);
 			
 			while(rs.next()){
 				txnId = rs.getInt(1);
+			}
+			if(txn.getType().equals("SELL")){
+				ClientDbo cdbo = ViewOilCashReserves(txn.getClientId());
+				double qty = cdbo.getQuantiy() + txn.getQuantity();
+				String sellUpdateOil = "update clientdbo set ClientDbo_quantity="+ qty
+						+" where clientdbo_id="+txn.getClientId();
+				MySqlExecute.executeUpdateMySqlQuery(sellUpdateOil);
 			}
 			return txnId;
 		} 
@@ -202,9 +211,8 @@ public class ClientDAO {
 			log.error("Error in deleting payment for that transaction " + e);
 		}
 		
-		query = "update clientdbo set clientdbo_quantity = " + txninfo.getQty()
-				+ " , clientdbo_credit= "+txninfo.getCreditAmt()+" where clientdbo_id = '" 
-				+ txninfo.getClientId() + "';";
+		query = "update clientdbo set clientdbo_credit= "
+				+txninfo.getCreditAmt()+" where clientdbo_id = '"+ txninfo.getClientId() + "';";
 		try{
 			MySqlExecute.executeUpdateMySqlQuery(query);
 		}
@@ -367,8 +375,8 @@ public class ClientDAO {
 				ClientDbo cdbo = ViewOilCashReserves(clientId);
 				
 				//Provide the updated quantity
-				double qty = cdbo.getQuantiy() - txn.getQuantity();
-				txnInfo.setQty(qty);
+				//double qty = cdbo.getQuantiy() - txn.getQuantity();
+				//txnInfo.setQty(qty);
 				
 				double creditAmt = cdbo.getCredit() + txn.getTxnCostPaid();
 				txnInfo.setCreditAmt(creditAmt);
