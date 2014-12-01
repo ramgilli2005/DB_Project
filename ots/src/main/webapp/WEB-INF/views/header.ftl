@@ -10,7 +10,7 @@
  	<#if model['uname']??>
  	 
  	 <#else>
-	location.href="login.html";
+	//location.href="login.html";
 	</#if>
   	});	
  	</script>

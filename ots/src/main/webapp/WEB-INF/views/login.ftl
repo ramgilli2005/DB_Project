@@ -12,17 +12,16 @@ function logincheck(){
 	var y=document.myform.password.value;
 	if(x=='' && y=='')
 	  {
-	alert("Enter User Name and Password");
-	 return false;
-
+		alert("Enter User Name and Password");
+	 	return false;
 	  }
 	  else if(x=='' || y =='')
 	  {
-	alert("Enter Both User Name and Password");
-	 return false;
+		alert("Enter Both User Name and Password");
+		return false;
 	  }
 	 
-	}
+}
 	
 	function redirectPg() {
         location.href = "signup.html";

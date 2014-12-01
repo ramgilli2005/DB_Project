@@ -11,25 +11,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("payment.html")
-public class PaymentController {
+@RequestMapping("txnpayment.html")
+public class PaymentTxnController {
 
-	private static final Logger log = Logger.getLogger(PaymentController.class);
+	private static final Logger log = Logger.getLogger(PaymentTxnController.class);
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String loginPage(HttpServletRequest req, HttpServletResponse resp, 
 			@ModelAttribute("model") ModelMap model){
-		log.debug("Entering Payment Controller GET");
-		String transactionId = req.getParameter("transactionId"); 
-		model.addAttribute("Page", "payment");
+		log.debug("Entering Txn Payment Controller GET");
+
 		return "main";
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public String verifyUser(HttpServletRequest req, HttpServletResponse resp,
 			@ModelAttribute("model") ModelMap model) {
-		log.debug("Entering payment Controller POST");
-		model.addAttribute("Page", "payment");
+		log.debug("Entering Txn Payment Controller POST");
+		model.addAttribute("Page", "payment_success");
 		return "main";
 	}
 }
