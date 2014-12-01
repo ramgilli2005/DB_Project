@@ -44,7 +44,7 @@ public class TraderDAO {
 				List<Txn> txns= new ArrayList<Txn>();
 				while(rs.next()){
 					txn.setTxnId(rs.getInt(1));
-					txn.setTxnDate(rs.getDate(2));
+					txn.setTxnDate(rs.getTimestamp(2));
 					txn.setQuantity(rs.getDouble(3));
 					txn.setType(rs.getString(4));
 					txn.setComsnType(rs.getString(5));
@@ -123,7 +123,7 @@ public class TraderDAO {
 				while(rs.next()){
 					txnlog.setTxnLogId(rs.getInt("txn_log_id"));
 					txnlog.setClientId(rs.getString("txn_log_client_id"));
-					txnlog.setTxnDate(rs.getDate("txn_log_date"));
+					txnlog.setTxnDate(rs.getTimestamp("txn_log_date"));
 					txnlog.setQuantity(rs.getDouble("txn_log_quantity"));
 					txnlog.setTxnType(rs.getString("txn_log_type"));
 					txnlog.setComsnType(rs.getString("txn_log_commission_type"));

@@ -166,7 +166,7 @@ public class ClientDAO {
 			while (rs.next()) {
 				txn = new Txn();
 				txn.setTxnId(rs.getInt(1));
-				txn.setTxnDate(rs.getDate(2));
+				txn.setTxnDate(rs.getTimestamp(2));
 				txn.setQuantity(rs.getDouble(3));
 				txn.setType(rs.getString(4));
 				txn.setComsnType(rs.getString(5));
@@ -195,8 +195,9 @@ public class ClientDAO {
 			log.error("Error in deleting transaction " + e);
 		}
 		
-		query = "delete from payment_info where payment_txn_id = " + txninfo.getTxnId() + ""
-				+ "and payment_client_id = '" + txninfo.getClientId()+ "';";
+		query = "delete from payment_info where payment_txn_id = " + txninfo.getTxnId() 
+				+ " and payment_client_id = '" + txninfo.getClientId()+ "';";
+		log.debug("Delete query:"+query);
 		try{
 		MySqlExecute.executeUpdateMySqlQuery(query);
 		}
@@ -219,7 +220,7 @@ public class ClientDAO {
 	public void InsertIntoTxnLog(TxnLog txnlog){
 		String query = "insert into transaction_log (`Txn_Log_Client_Id`,`Txn_Log_Date`,`Txn_Log_Quantity`, `Txn_Log_Type`,"
 				+ " `Txn_Log_Commission_Type`, `Txn_Log_status`, `Txn_log_Trader_id`, `Txn_log_cost`, `Txn_log_total_comsn`) "
-				+ "values ('" +txnlog.getClientId() + "'," + txnlog.getTxnDate() + ","
+				+ "values ('" +txnlog.getClientId() + "','" + txnlog.getTxnDate() + "', "
 				+txnlog.getQuantity() + ",'" + txnlog.getTxnType() + "','" + txnlog.getComsnType() + "','"	
 				+txnlog.getLogStatus() + "','" + txnlog.getTraderId()+ "'," +txnlog.getTxnCost() +","+ txnlog.getComsnCost() +")";
 		
@@ -274,7 +275,7 @@ public class ClientDAO {
 					txnlog = new TxnLog();
 					txnlog.setTxnLogId(rs.getInt("txn_log_id"));
 					txnlog.setClientId(rs.getString("txn_log_client_id"));
-					txnlog.setTxnDate(rs.getDate("txn_log_date"));
+					txnlog.setTxnDate(rs.getTimestamp("txn_log_date"));
 					txnlog.setQuantity(rs.getDouble("txn_log_quantity"));
 					txnlog.setTxnType(rs.getString("txn_log_type"));
 					txnlog.setComsnType(rs.getString("txn_log_commission_type"));
@@ -340,7 +341,7 @@ public class ClientDAO {
 			while(rs.next()){
 				txn = new Txn();
 				txn.setTxnId(rs.getInt("Txn_Id"));
-				txn.setTxnDate(rs.getDate("Txn_date"));
+				txn.setTxnDate(rs.getTimestamp("Txn_date"));
 				txn.setQuantity(rs.getDouble("Txn_quantity"));
 				txn.setType(rs.getString("Txn_type"));
 				txn.setComsnType(rs.getString("Txn_comsn_type"));

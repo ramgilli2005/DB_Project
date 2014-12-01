@@ -48,6 +48,7 @@ public class ClientTxnApprovalController {
 		try{
 			String clientId = (String)session.getAttribute("clientId");
 			String payCancel = req.getParameter("approvecancel");
+			log.debug("Payment/Cancel: "+payCancel);
 			String[] strCheckBoxValue = req.getParameterValues("checkbox[]");
 			List<Integer> txnIdList = new ArrayList<Integer>();
 			if (strCheckBoxValue != null) {
@@ -74,7 +75,7 @@ public class ClientTxnApprovalController {
 				model.addAttribute("creditAmt", clientDbo.getCredit());
 				model.addAttribute("txnId", txnId);
 				model.addAttribute("costPaid", (null != txnDetails ? txnDetails.getTxnCostPaid() : "0"));
-				model.addAttribute("txnCost", req.getParameter("txncost"));
+				model.addAttribute("txnCost", txnDetails.getTxnCost());
 				
 				model.addAttribute("Page", "payment");
 			}
@@ -82,9 +83,6 @@ public class ClientTxnApprovalController {
 			log.error("Exception in txnapproval");
 		}
 		
-		
-		model.addAttribute("trnlist", null);
-		model.addAttribute("Page", "tamhome");
 		return "main";
 	}
 }

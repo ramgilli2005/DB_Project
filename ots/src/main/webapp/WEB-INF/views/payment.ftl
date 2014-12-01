@@ -8,10 +8,13 @@
 <script>
 function doPayCard() {
 		if(confirm('Are you sure you want to pay by Card?')){
-			var a=document.form.txncost.value;
-			var b=document.form.txncostpd.value;
-			var x=document.form.pymntamt.value;
-			if((b+x) > a){
+			var a=0;
+			a=document.form.txncost.value;
+			var b=0;
+			b=document.form.txncostpd.value;
+			var x=0;
+			x=document.form.pymntamt.value;
+			if((parseFloat(b)+parseFloat(x)) > a){
 				alert("Overpaying is not allowed right now!");
 				return;
 			}		
@@ -72,7 +75,7 @@ function transactRedirect(){
 		Your Current Credit:
 		</TD>
 		<TD colspan=2 style="padding-top: 10px; padding-bottom: 15px;">
-		<input type=text id="creditAmt" style="width:70px;" name=creditAmt <#if model['txnCost']??>value="${model.creditAmt}"</#if> readonly />		
+		<input type=text id="creditAmt" style="width:70px;" name=creditAmt <#if model['creditAmt']??>value="${model.creditAmt}"</#if> readonly />		
 		</TD>						
 		</TR>
 		<TR bgcolor="orange">

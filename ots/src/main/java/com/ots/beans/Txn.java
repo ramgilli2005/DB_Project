@@ -1,11 +1,11 @@
 package com.ots.beans;
 
-import java.util.Date;
+import java.sql.Timestamp;;
 
 public class Txn {
 	
 	private int txnId;
-	private Date txnDate;
+	private Timestamp txnDate;
 	private double quantity;
 	private String type;
 	private String comsnType;
@@ -69,10 +69,10 @@ public class Txn {
 	public void setTxnId(int txnId) {
 		this.txnId = txnId;
 	}
-	public Date getTxnDate() {
+	public Timestamp getTxnDate() {
 		return txnDate;
 	}
-	public void setTxnDate(Date txnDate) {
+	public void setTxnDate(Timestamp txnDate) {
 		this.txnDate = txnDate;
 	}
 }
