@@ -27,7 +27,7 @@
  	}
  	#div5{
  		top: -34px;
- 		left: 285px;
+ 		left: 315px;
  		height: 0px;
  	}
  	
@@ -79,6 +79,7 @@
 		
         <ul class="dropdown-menu" role="menu" aria-labelledby="menu2">
           <li role="presentation"><a role="menuitem" tabindex="-1" href="trdtxnhist.html">Transaction History</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="tradertxn.html">Make Transaction</a></li>
           <li role="presentation" class="divider"></li>
           <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
         </ul>

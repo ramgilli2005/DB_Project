@@ -100,7 +100,7 @@
 				
 			</div>
 <#else>
-<span id=Message> All transactions are either Approved or cancelled</span>
+<span id=Message style="color:red"> All transactions are either Approved or cancelled</span>
 </#if>
 </@springform.form> 
 </body>

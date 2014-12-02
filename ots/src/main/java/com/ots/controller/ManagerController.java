@@ -40,9 +40,11 @@ public class ManagerController {
 		String type = req.getParameter("type");
 		String startDate = req.getParameter("startdate");
 		String endDate = req.getParameter("enddate");
+		startDate += " 00:00:00";
+		endDate += " 00:00:00";
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat(
-					"yyyy-MM-dd hh:mm:ss.SSS");
+					"yyyy-MM-dd hh:mm:ss");
 			Date parsedDate = dateFormat.parse(startDate);
 			Timestamp firstDate = new java.sql.Timestamp(parsedDate.getTime());
 			parsedDate = dateFormat.parse(endDate);

@@ -16,9 +16,9 @@
 	</#if>
     <div align="left">
     <form name="myform" method="POST" action="Mgrtxnaggr.html" >
-		Start Date[YYYY/MM/DD]: <input type=text id="startdate" name=startdate />
+		Start Date[YYYY-MM-DD]: <input type=text id="startdate" name=startdate />
 		<br>
-		End Date [YYYY/MM/DD]: <input type=text id="enddate" name=enddate />
+		End Date [YYYY-MM-DD]: <input type=text id="enddate" name=enddate />
 		</br>	 
 		<select id= "type" class="commonSelect" name = "type" >
 							<option value="DAILY" selected>Daily</option>

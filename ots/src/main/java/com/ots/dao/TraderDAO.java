@@ -139,20 +139,77 @@ public class TraderDAO {
 		}
 	}
 	
-	//Insert into transaction log after deleting from transaction
-	public void InsertIntoTxnLog(TxnLog txnlog){
+	public void InsertIntoTxnLog(TxnLog txnlog) {
 		String query = "insert into transaction_log (`Txn_Log_Id`,`Txn_Log_Client_Id`,`Txn_Log_Date`,`Txn_Log_Quantity`, `Txn_Log_Type`,"
 				+ " `Txn_Log_Commission_Type`, `Txn_Log_status`, `Txn_log_Trader_id`, `Txn_log_cost`, `Txn_log_total_comsn`) "
-				+ "values (" + txnlog.getTxnLogId() + ",'" +txnlog.getClientId() + "','" + txnlog.getTxnDate() + "',"
-				+txnlog.getQuantity() + ",'" + txnlog.getTxnType() + "','" + txnlog.getComsnType() + "','"	
-				+txnlog.getLogStatus() + "','" + txnlog.getTraderId()+ "'," +txnlog.getTxnCost() +",'"+ txnlog.getComsnCost() +"')";
-		
-		try{
+				+ "values ("
+				+ txnlog.getTxnLogId()
+				+ ",'"
+				+ txnlog.getClientId()
+				+ "','"
+				+ txnlog.getTxnDate()
+				+ "',"
+				+ txnlog.getQuantity()
+				+ ",'"
+				+ txnlog.getTxnType()
+				+ "','"
+				+ txnlog.getComsnType()
+				+ "','"
+				+ txnlog.getLogStatus()
+				+ "','"
+				+ txnlog.getTraderId()
+				+ "',"
+				+ txnlog.getTxnCost()
+				+ ",'"
+				+ txnlog.getComsnCost() + "')";
+		try {
 			MySqlExecute.executeUpdateMySqlQuery(query);
-		}
-		catch(Exception e){
+		} catch (Exception e) {
 			log.error("Error while inserting record into transaction_log " + e);
 		}
+		if (txnlog.getLogStatus().toUpperCase() == "APPROVED") {
+			query = "select client_level from client where client_id = "
+					+ txnlog.getClientId();
+			String level = "GOLD";
+			try {
+				ResultSet rs = MySqlExecute.executeMySqlQuery(query);
+				while (rs.next()) {
+					level = rs.getString(1);
+				}
+				if (level.toUpperCase() == "SILVER")
+					CheckForGold(txnlog.getClientId());
+			} catch (Exception e) {
+				log.error("Error while fetching client level " + e);
+			}
+		}
+	}
+
+	// check if the client has crossed 30 transactions for the month
+	public boolean CheckForGold(String clientId) {
+		String query = "SELECT count(1) FROM `transaction_log` WHERE txn_log_client_id = "
+				+ clientId
+				+ " and "
+				+ "Month(txn_log_date) = Month(CURRENT_DATE) and Year(txn_log_date) = Year(CURRENT_DATE)";
+		int count = 0;
+		try {
+			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
+			while (rs.next()) {
+				count = rs.getInt(1);
+			}
+			if (count > 30) {
+				query = "update client set client_level = GOLD where client_id = "
+						+ clientId;
+				try {
+					MySqlExecute.executeUpdateMySqlQuery(query);
+				} catch (Exception e) {
+					log.error("Error while updating client level " + e);
+				}
+			}
+		} catch (Exception e) {
+			log.error("Error while fetching the transactions made by the client for a particular month "
+					+ e);
+		}
+		return false;
 	}
 	
 	//View all past transactions of all clients
@@ -348,16 +405,18 @@ public class TraderDAO {
 	public List<UserInfo> FetchClientRecords(String fetchBy, String IdNameCity) {
 		String query = "";
 		List<UserInfo> clientDetails = new ArrayList<UserInfo>();
-		if (fetchBy == "ID") {
-			query = "select client_Id,client_fName from Client where clietn_Id = '"
-					+ IdNameCity + "'";
-		} else if (fetchBy == "NAME") {
-			query = "select client_Id,client_fName from Client where client_fname = '"
-					+ IdNameCity + "'";
+		log.debug("FetchBy: "+fetchBy);
+		if (fetchBy.equals("ID")) {
+			query = "select client_Id,client_fName from Client where client_Id like '"
+					+ IdNameCity + "%'";
+		} else if (fetchBy.equals("NAME")) {
+			query = "select client_Id,client_fName from Client where client_fname Like '"
+					+ IdNameCity + "%'";
 		} else {
 			query = "select client_Id,client_fName from Client where client_Id = (select Address_Client_Id "
-					+ "from address where Address_city = '" + IdNameCity + "')";
+					+ "from address where Address_city like '" + IdNameCity + "%')";
 		}
+		log.debug("Query in FetchClientRecords: "+query);
 		try {
 			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
 			while (rs.next()) {
@@ -386,6 +445,23 @@ public class TraderDAO {
 		} catch(Exception e){
 			log.error("Erroor in approving Payment"+e);
 		}
+	}
+	
+	public List<UserInfo> getAllClientId(){
+		List<UserInfo> uInfoList = new ArrayList<UserInfo>();
+		String query = "Select Client_Id from client";
+		try{
+			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
+			UserInfo uInfo;
+			while(rs.next()){
+				uInfo = new UserInfo();
+				uInfo.setClientId(rs.getString("Client_Id"));
+				uInfoList.add(uInfo);
+			}
+		} catch(Exception e){
+			log.error("Exception in fetching clientIds"+e);
+		}
+		return uInfoList;
 	}
 	
 }

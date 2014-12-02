@@ -14,32 +14,33 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.ots.beans.Txn;
+import com.ots.beans.ClientDbo;
+import com.ots.beans.UserInfo;
+import com.ots.dao.ClientDAO;
 import com.ots.dao.TraderDAO;
 
 @Controller
-@RequestMapping("tamhome.html")
-public class TraderHomeController {
+@RequestMapping("tradertxn.html")
+public class TraderTransactController {
 	
 	@Autowired
 	private TraderDAO traderDAO;
 	
-	private static final Logger log = Logger.getLogger(TraderHomeController.class);
+	@Autowired
+	private ClientDAO clientDAO;
+	
+	private static final Logger log = Logger.getLogger(TraderTransactController.class);
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String loginPage(HttpServletRequest req, HttpServletResponse resp, 
 			@ModelAttribute("model") ModelMap model){
-		log.debug("Entering Client Home Controller GET");
-		HttpSession session = req.getSession();
+		log.debug("Entering TraderTransactController GET");
 		try{
-			List<Txn> txnList = traderDAO.ViewPaidPendingTxn();
-			if(txnList.size() != 0){
-				model.addAttribute("txnlist", txnList);
-			}
-			model.addAttribute("Page", "tamhome");
+			List<UserInfo> uInfoList = traderDAO.getAllClientId();
+			model.addAttribute("clientIdList", uInfoList);
+			model.addAttribute("Page", "tradertxn");
 		} catch(Exception e){
-			log.error("Error in fetching txns");
-			model.addAttribute("errorMsg", "Something went wrong");
+			log.error("Error in Trader Transact"+e);
 		}
 		
 		return "main";
@@ -48,7 +49,17 @@ public class TraderHomeController {
 	@RequestMapping(method = RequestMethod.POST)
 	public String verifyUser(HttpServletRequest req, HttpServletResponse resp,
 			@ModelAttribute("model") ModelMap model) {
-		model.addAttribute("Page", "");
+		HttpSession session = req.getSession();
+		try{
+			String clientId = req.getParameter("selclientid");
+			ClientDbo clientDbo = clientDAO.ViewOilCashReserves(clientId);
+			log.debug((null != clientDbo ? clientDbo.getQuantiy() : "null obj"));
+			model.addAttribute("clientId", clientId);
+			model.addAttribute("curQty", (null != clientDbo ? clientDbo.getQuantiy() : "0"));
+			model.addAttribute("Page", "trdmaketxn");
+		} catch(Exception e){
+			log.error("Error in Trader Transact POST"+e);
+		}
 		return "main";
 	}
 }

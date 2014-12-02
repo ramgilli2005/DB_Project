@@ -52,6 +52,38 @@ public class ClientDAO {
 		return txnId;
 	}
 	
+	public int traderMakeTxn (Txn txn) {
+		int txnId = -1;
+		
+		String query = "insert into transaction (`Txn_quantity`, `Txn_type`, `Txn_comsn_type`,"
+					+ "`Txn_Client_Id`, `Txn_total_comsn`, `Txn_cost`, `Txn_cost_paid`, `Txn_Trader_Id`) values"
+					+ "("+txn.getQuantity()+",'"+txn.getType()+"','"+txn.getComsnType()+"','"
+					+txn.getClientId()+"',"+txn.getTotalComsn()+","+txn.getTxnCost()+", 0.0, '"+txn.getTraderId()+"')";
+		log.debug("Txn Query: "+query);
+		String txnIdQuery = "Select LAST_INSERT_ID()";
+		
+		try {
+			MySqlExecute.executeUpdateMySqlQuery(query);
+			ResultSet rs = MySqlExecute.executeMySqlQuery(txnIdQuery);
+			
+			while(rs.next()){
+				txnId = rs.getInt(1);
+			}
+			if(txn.getType().equals("SELL")){
+				ClientDbo cdbo = ViewOilCashReserves(txn.getClientId());
+				double qty = cdbo.getQuantiy() - txn.getQuantity();
+				String sellUpdateOil = "update clientdbo set ClientDbo_quantity="+ qty
+						+" where clientdbo_id="+txn.getClientId();
+				MySqlExecute.executeUpdateMySqlQuery(sellUpdateOil);
+			}
+			return txnId;
+		} 
+		catch (Exception e) {
+			log.error("Error in creating transation " + e);
+		}
+		return txnId;
+	}
+	
 	// Check if oil reserves are sufficient
 	public boolean CheckOilReserves(String clientId, double txnquantity) {
 		String query = "SELECT `Clientdbo_quantity` FROM `clientdbo` WHERE clientdbo_id = '"
@@ -245,7 +277,6 @@ public class ClientDAO {
 			List<PaymentForTxn> payments = new ArrayList<PaymentForTxn>();
 			PaymentForTxn payment;
 			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
-			if(rs.next()){
 				while(rs.next()){
 					payment = new PaymentForTxn();
 					payment.setPaymentId(rs.getInt(1));
@@ -258,15 +289,39 @@ public class ClientDAO {
 					payments.add(payment);
 				}
 				return payments;
-			}
-			else
-				return null;
 		}
 		catch(Exception e){
 			log.error("Error in fetching data from payment info " + e);
 			return null;
 		}
 	}
+	
+	//View payments done for a transaction of a client
+	public List<PaymentForTxn> getPayment(String clientId){
+		String query = "select * from Payment_info where payment client_id = '" + clientId+"';";
+		try{
+			List<PaymentForTxn> payments = new ArrayList<PaymentForTxn>();
+			PaymentForTxn payment;
+			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
+				while(rs.next()){
+					payment = new PaymentForTxn();
+					payment.setPaymentId(rs.getInt(1));
+					payment.setPaymentDate(rs.getTimestamp(2));
+					payment.setPaymentAmount(rs.getDouble(3));
+					payment.setTxnId(rs.getInt(4));
+					payment.setStatus(rs.getString(5));
+					payment.setTraderId(rs.getString(6));
+					payment.setClientId(rs.getString(7));
+					payments.add(payment);
+				}
+				return payments;
+		}
+		catch(Exception e){
+			log.error("Error in fetching data from payment info " + e);
+			return null;
+		}
+	}
+
 	
 	//View all past transactions
 	public List<TxnLog> ViewTxns(String clientId){
@@ -417,4 +472,17 @@ public class ClientDAO {
 		
 		return b;
 	}
+	 public String getUserLvl(String clientId){
+		 String usrLvl= "SILVER";
+		 String query = "Select Client_level from client where Client_Id="+clientId;
+		 try{
+			 ResultSet rs = MySqlExecute.executeMySqlQuery(query);
+			 while(rs.next()){
+				 usrLvl = rs.getString("Client_level");
+			 }
+		 } catch(Exception e){
+			 log.error("Error in fetching Client Level"+e);
+		 }
+		 return usrLvl;
+	 }
 }

@@ -25,6 +25,7 @@ public class ManagerDAO {
 				+ endDate
 				+ "'"
 				+ " and txn_log_status = 'APPROVED' group By txn_log_date order by txn_log_date";
+		log.debug("Query in Aggregate: "+query);
 		List<AggregateInfo> aggrInfo = new ArrayList<AggregateInfo>();
 		try {
 			ResultSet rs = MySqlExecute.executeMySqlQuery(query);
@@ -57,6 +58,8 @@ public class ManagerDAO {
 					}
 					dailyInfo.setStartDate(t);
 					dailyInfo.setEndDate(ts);
+					log.debug("ManagerDAO: End Date: "+ dailyInfo.getEndDate());
+					log.debug("ManagerDAO: Count: "+ dailyInfo.getCount());
 					aggreInfo.add(dailyInfo);
 					dailyInfo = new AggregateInfo();
 					flag = true;

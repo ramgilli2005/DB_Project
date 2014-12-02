@@ -17,7 +17,6 @@
 			<table class="altrowstable" id="alternatecolor" border=1>
 						<TR align="center" bgcolor="yellow" border=1 >
 						<TH>Start Date</TH>
-						<TH>End Date</TH>
 						<TH align="center">Aggregate Txn Cost</TH>
 						<TH>Aggregate Txn Count</TH>
 						</TR>
@@ -27,7 +26,6 @@
 						<tr align="center" class="oddrowcolor">
 						
 						<td style="width:150px; padding: 0px;" class="commonText">${tlist.getStartDate()}</td>
-						<td style="width:150px; padding: 0px;" class="commonText">${tlist.getEndDate()}</td>
 						<td style="width:150px; padding: 0px;" class="commonText">${tlist.getAggregateValue()}</td>
 						<td style="width:150px; padding: 0px;" class="commonText">${tlist.getCount()}</td>
 						</tr>
@@ -35,7 +33,6 @@
 						<#if i%2 != 0>
 						<tr align="center" class="evenrowcolor">
 						<td style="width:150px; padding: 0px;" class="commonText">${tlist.getStartDate()}</td>
-						<td style="width:150px; padding: 0px;" class="commonText">${tlist.getEndDate()}</td>
 						<td style="width:150px; padding: 0px;" class="commonText">${tlist.getAggregateValue()}</td>
 						<td style="width:150px; padding: 0px;" class="commonText">${tlist.getCount()}</td>
 						

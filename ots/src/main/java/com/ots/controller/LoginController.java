@@ -102,7 +102,10 @@ public class LoginController {
 				} else if(uInfo.getUserType().equals("trader")) {
 					
 					List<Txn> txnList = traderDAO.ViewPaidPendingTxn();
-					model.addAttribute("txnlist", txnList);
+					if(txnList.size() != 0){
+						model.addAttribute("txnlist", txnList);
+					}
+					
 					model.addAttribute("Page", "tamhome");
 					log.debug("System ID: "+uInfo.getClientId());
 					
