@@ -27,8 +27,9 @@ public class AdminUpdOilController {
 	public String loginPage(HttpServletRequest req, HttpServletResponse resp, 
 			@ModelAttribute("model") ModelMap model){
 		log.debug("Entering Client Home Controller GET");
-		
-		model.addAttribute("Page", "adminupdoil");
+		double oilPrice = adminDAO.getOilPrice();
+		model.addAttribute("oilPrice", oilPrice);
+		model.addAttribute("Page", "adminoil");
 		return "main";
 	}
 	

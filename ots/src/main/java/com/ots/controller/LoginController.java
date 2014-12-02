@@ -113,7 +113,7 @@ public class LoginController {
 				}
 				
 				model.addAttribute("uname", uInfo.getfName()+" "+(uInfo.getlName()==null ? "":uInfo.getlName()));
-				model.addAttribute("Page", "tamhome");
+//				model.addAttribute("Page", "tamhome");
 				session.setAttribute("clientId", uInfo.getClientId());
 				session.setAttribute("uname", uInfo.getfName()+" "+(uInfo.getlName()==null ? "":uInfo.getlName()));
 				session.setAttribute("userType", "system");
