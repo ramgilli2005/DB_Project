@@ -25,7 +25,8 @@
 		<TD colspan=2 style="padding-top: 10px;">
 		<input type=text id="searchval" name=searchval style="height: 25px; width:100px;"/>  
 		</TD>
-		</table>			 
+		</table>
+		<input type=submit class="submitButton" value="Search" />			 
 		</form>		
 	</div>
 
