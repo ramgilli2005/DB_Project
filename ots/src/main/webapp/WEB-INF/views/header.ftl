@@ -20,6 +20,17 @@
  		left: 85px;
  		height: 0px;
  	}
+ 	 	#div4{
+ 		top: -34px;
+ 		left: 185px;
+ 		height: 0px;
+ 	}
+ 	#div5{
+ 		top: -34px;
+ 		left: 285px;
+ 		height: 0px;
+ 	}
+ 	
  	</style>
  <body>
  <div id="headerdiv">
@@ -62,17 +73,61 @@
           <li role="presentation" class="divider"></li>
           <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
         </ul>
-        <div class="dropdown" id="div3">
+        <div class="dropdown" id="div4">
         <button class="btn btn-default dropdown-toggle" type="button" id="menu2" data-toggle="dropdown">Transactions
         <span class="caret"></span></button>
 		
         <ul class="dropdown-menu" role="menu" aria-labelledby="menu2">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="trdtxnhist.html">Transaction History</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
+        </ul>
+        </div>
+        <div class="dropdown" id="div3">
+        <button class="btn btn-default dropdown-toggle" type="button" id="menu3" data-toggle="dropdown">Payment
+        <span class="caret"></span></button>
+		
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu3">
           <li role="presentation"><a role="menuitem" tabindex="-1" href="trdpymntapproval.html">Payment Approval</a></li>
           <li role="presentation" class="divider"></li>
           <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
         </ul>
         </div>
+         <div class="dropdown" id="div5">
+        <button class="btn btn-default dropdown-toggle" type="button" id="menu5" data-toggle="dropdown">Search
+        <span class="caret"></span></button>
+		
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu5">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="searchclnt.html">Search Client</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
+        </ul>
+        </div>
         </#if>
+		<#if Session["Sys_Position"] = "manager">
+		 <div class="dropdown">
+		<button class="btn btn-default dropdown-toggle" type="button" id="menu3" data-toggle="dropdown">Manager
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu3">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="Mgrtxnhist.html">Transaction History</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="Mgrtxnaggr.html">Aggregate</a></li>
+          
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
+        </ul>
+       </#if>
+		<#if Session["Sys_Position"] = "admin">
+		 <div class="dropdown">
+		<button class="btn btn-default dropdown-toggle" type="button" id="menu3" data-toggle="dropdown">Admin
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu3">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="adminoil.html">View Oil Price</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="adminupdoil.html">Update Oil Price</a></li>
+          
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
+        </ul>
+       </#if>
 		</#if>
      
       		<div style="float:right; color:yellow; padding-left: 20px;">

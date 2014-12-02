@@ -120,7 +120,7 @@ public class TraderDAO {
 		}
 		
 		query = "delete from payment_info where payment_txn_id = " + txninfo.getTxnId() + ""
-				+ "and payment_client_id = '"+txninfo.getClientId()+"';";
+				+ " and payment_client_id = '"+txninfo.getClientId()+"';";
 		try{
 			MySqlExecute.executeUpdateMySqlQuery(query);
 		}
@@ -143,7 +143,7 @@ public class TraderDAO {
 	public void InsertIntoTxnLog(TxnLog txnlog){
 		String query = "insert into transaction_log (`Txn_Log_Id`,`Txn_Log_Client_Id`,`Txn_Log_Date`,`Txn_Log_Quantity`, `Txn_Log_Type`,"
 				+ " `Txn_Log_Commission_Type`, `Txn_Log_status`, `Txn_log_Trader_id`, `Txn_log_cost`, `Txn_log_total_comsn`) "
-				+ "values (" + txnlog.getTxnLogId() + ",'" +txnlog.getClientId() + "'," + txnlog.getTxnDate() + ","
+				+ "values (" + txnlog.getTxnLogId() + ",'" +txnlog.getClientId() + "','" + txnlog.getTxnDate() + "',"
 				+txnlog.getQuantity() + ",'" + txnlog.getTxnType() + "','" + txnlog.getComsnType() + "','"	
 				+txnlog.getLogStatus() + "','" + txnlog.getTraderId()+ "'," +txnlog.getTxnCost() +",'"+ txnlog.getComsnCost() +"')";
 		

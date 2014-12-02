@@ -10,9 +10,10 @@
 </head>
 <body>
 <@springform.form modelAttribute="model" name="form" method="POST" action="">
-<#if model["trnlist"]??>
-<div style="width:676px;height:350px;overflow-x:hidden; overflow-y:auto; font-family: 'Lucida Grande'; font-size: 12pt; color: blue;">
-<table class="altrowstable" id="alternatecolor" >
+<#if model["txnlist"]??>
+		<div style="BORDER:#E6e6e6 2px solid;width:676px;height:350px;overflow-x:hidden; overflow-y:auto; font-family: 'Lucida Grande'; font-size: 12pt; color: blue; margin-left: 30px; margin-top: 20px;">
+			<table class="altrowstable" id="alternatecolor" border=1>
+
 <TR align="center" bgcolor="yellow" border=1 >
 <TH>Txn Type</TH>
 <TH>Quantity</TH>
@@ -21,10 +22,10 @@
 <TH>Txn Commission Cost</TH>
 <TH>Txn Cost</TH>
 <TH>Txn Status</TH>
-<TH>Txn Trader Id</TH>
+<TH>Txn Approver Id</TH>
 </TR>
 <#assign i = 1>
-<#list model["trnlist"] as tlist>
+<#list model["txnlist"] as tlist>
 <#if i%2 == 0>
 <tr  class="oddrowcolor">
 <td style="width:150px; padding: 0px;" class="commonText">${tlist.getTxnType()}</td>

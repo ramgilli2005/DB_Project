@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.ots.beans.ClientDbo;
 import com.ots.beans.LoginInfo;
 import com.ots.beans.Txn;
+import com.ots.beans.TxnLog;
 import com.ots.beans.UserInfo;
+import com.ots.dao.AdminDAO;
 import com.ots.dao.ClientDAO;
 import com.ots.dao.LoginDAO;
 import com.ots.dao.TraderDAO;
@@ -34,6 +36,9 @@ public class LoginController {
 	
 	@Autowired
 	TraderDAO traderDAO;
+	
+	@Autowired
+	AdminDAO adminDAO;
 
 	private static final Logger log = Logger.getLogger(LoginController.class);
 	
@@ -89,16 +94,31 @@ public class LoginController {
 					model.addAttribute("errorMsg", "Invalid Credentials");
 					return "login";
 				}
-				List<Txn> txnList = traderDAO.ViewPaidPendingTxn();
-				model.addAttribute("txnlist", txnList);
-				model.addAttribute("Page", "tamhome");
-				log.debug("System ID: "+uInfo.getClientId());
+				if(uInfo.getUserType().equals("manager")){
+					List<TxnLog> txnLogList = traderDAO.ViewTxns();
+					log.debug("List size: " + txnLogList.size());
+					model.addAttribute("txnlist", txnLogList);
+					model.addAttribute("Page", "Mgrtxnhist");
+				} else if(uInfo.getUserType().equals("trader")) {
+					
+					List<Txn> txnList = traderDAO.ViewPaidPendingTxn();
+					model.addAttribute("txnlist", txnList);
+					model.addAttribute("Page", "tamhome");
+					log.debug("System ID: "+uInfo.getClientId());
+					
+				} else if(uInfo.getUserType().equals("admin")){
+					double oilPrice = adminDAO.getOilPrice();
+					model.addAttribute("oilPrice", oilPrice);
+					model.addAttribute("Page", "adminoil");
+				}
+				
 				model.addAttribute("uname", uInfo.getfName()+" "+(uInfo.getlName()==null ? "":uInfo.getlName()));
+				model.addAttribute("Page", "tamhome");
 				session.setAttribute("clientId", uInfo.getClientId());
 				session.setAttribute("uname", uInfo.getfName()+" "+(uInfo.getlName()==null ? "":uInfo.getlName()));
 				session.setAttribute("userType", "system");
 				session.setAttribute("Sys_Position", uInfo.getUserType());
-				model.addAttribute("Page", "tamhome");
+
 			}
 			
 			return "main";
