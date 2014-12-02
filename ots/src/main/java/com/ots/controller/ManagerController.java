@@ -1,10 +1,9 @@
 package com.ots.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
