@@ -1,5 +1,7 @@
 package com.ots.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ots.beans.ClientDbo;
 import com.ots.beans.LoginInfo;
+import com.ots.beans.Txn;
 import com.ots.beans.UserInfo;
 import com.ots.dao.ClientDAO;
 import com.ots.dao.LoginDAO;
+import com.ots.dao.TraderDAO;
 
 @Controller
 @RequestMapping("login.html")
@@ -27,6 +31,9 @@ public class LoginController {
 	
 	@Autowired
 	ClientDAO clientDAO;
+	
+	@Autowired
+	TraderDAO traderDAO;
 
 	private static final Logger log = Logger.getLogger(LoginController.class);
 	
@@ -82,13 +89,16 @@ public class LoginController {
 					model.addAttribute("errorMsg", "Invalid Credentials");
 					return "login";
 				}
+				List<Txn> txnList = traderDAO.ViewPaidPendingTxn();
+				model.addAttribute("txnlist", txnList);
+				model.addAttribute("Page", "tamhome");
 				log.debug("System ID: "+uInfo.getClientId());
 				model.addAttribute("uname", uInfo.getfName()+" "+(uInfo.getlName()==null ? "":uInfo.getlName()));
 				session.setAttribute("clientId", uInfo.getClientId());
 				session.setAttribute("uname", uInfo.getfName()+" "+(uInfo.getlName()==null ? "":uInfo.getlName()));
 				session.setAttribute("userType", "system");
 				session.setAttribute("Sys_Position", uInfo.getUserType());
-				model.addAttribute("Page", "success");
+				model.addAttribute("Page", "tamhome");
 			}
 			
 			return "main";

@@ -15,7 +15,7 @@
   	});	
  	</script>
  	<style>
- 	#div2 {
+ 	#div2, #div3 {
  		top: -34px;
  		left: 85px;
  		height: 0px;
@@ -26,6 +26,7 @@
 	<div class="container">
 	<br/>
 		 <div class="dropdown"id="div1" >
+		 <#if Session['userType']??>
         <#if Session["userType"] = "customer">
 		<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Client
         <span class="caret"></span></button>
@@ -48,16 +49,29 @@
         </ul>
         </div>
         </#if>
+		</#if>
 		<#if Session["Sys_Position"]??>
 		<#if Session["Sys_Position"] = "trader">
 		 <div class="dropdown">
 		<button class="btn btn-default dropdown-toggle" type="button" id="menu3" data-toggle="dropdown">Trader
         <span class="caret"></span></button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="menu3">
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="tamhome.html">Trader Home</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="tamhome.html">Trader Approvals</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="traderpendingcancel.html">View Pending Txns</a></li>
+          
           <li role="presentation" class="divider"></li>
           <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
         </ul>
+        <div class="dropdown" id="div3">
+        <button class="btn btn-default dropdown-toggle" type="button" id="menu2" data-toggle="dropdown">Transactions
+        <span class="caret"></span></button>
+		
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu2">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="trdpymntapproval.html">Payment Approval</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
+        </ul>
+        </div>
         </#if>
 		</#if>
      

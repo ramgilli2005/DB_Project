@@ -13,6 +13,11 @@ function logincheck(){
 		alert("Please enter quantity!!!");
 	 	return false;	
 	}
+	var y = document.myform.cur_qty.value;
+	if(parseFloat(x) - parseFloat(y) < 0){
+		alert("You have insufficient OIL for SELL!!!");
+	 	return false;
+	}
 }
 $(document).ready(function(){
 
@@ -65,5 +70,7 @@ $(document).ready(function(){
 		</TR>
 	</table>
 	</form>	
-
+<#if model['errorMsg']??>
+		<div id="errordiv" style="color:red;">${model.errorMsg}</div>
+</#if>
 </body>

@@ -94,8 +94,7 @@
 			<div align="left">
 				<br/>
 				<input type="hidden" id="approvecancel" name="approvecancel">
-				<input type="hidden" id="pagename" name="pagename" value="tamhome">
-				<input class="submitButton" id="approve" name="approve" type="button"  value="Approve" onclick="doApprove()">
+				<input type="hidden" id="pagename" name="pagename" value="viewpendingtxn">
 				<input class="submitButton" id="cancel" name="cancel" type="button"  value="Cancel" onclick="doCancel()">
 				
 			</div>

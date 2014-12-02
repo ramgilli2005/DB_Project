@@ -44,26 +44,32 @@
 </script>
 </head>
 <body>
-<@springform.form modelAttribute="model" name="form" method="POST" action="pymntapproval.html">
+<@springform.form modelAttribute="model" name="form" method="POST" action="trdpymntapproval.html">
 <#if model["pymntlist"]??>
-		<div style="width:676px;height:350px;overflow-x:hidden; overflow-y:auto; font-family: 'Lucida Grande'; font-size: 12pt; color: blue;">
-			<table class="altrowstable" id="alternatecolor" >
+		<div style="BORDER:#E6e6e6 2px solid;width:676px;height:350px;overflow-x:hidden; overflow-y:auto; font-family: 'Lucida Grande'; font-size: 12pt; color: blue; margin-left: 30px; margin-top: 20px;">
+			<table class="altrowstable" id="alternatecolor" border=1>
+						<TR align="center" bgcolor="yellow" border=1 >
+						<TH>Choose</TH>
+						<TH>Payment Amt</TH>
+						<TH align="center">Client Id</TH>
+						<TH>Payment Date</TH>
+						</TR>
 						<#assign i = 1>
-						<#list model["pymntist"] as plist>
+						<#list model["pymntlist"] as plist>
 						<#if i%2 == 0>
 						<tr  class="oddrowcolor">
-						<td style="width:20px; padding:  0px;"><input name="checkbox[]"  type="checkbox" value="${plist.getPymntId()}::${plist.getTxnId()}"></td>
-						<td style="width:150px; padding: 0px;" class="commonText">${plist.getPymntAmt()} </td>
-						<td style="width:150px; padding: 0px;" class="commonText">${plist.getClientName()} </td>
-						<td style="width:150px; padding: 0px;" class="commonText">${plist.getPymntDate()} </td>
+						<td style="width:20px; padding:  0px;"><input name="checkbox[]"  type="checkbox" value="${plist.getPaymentId()}"></td>
+						<td style="width:150px; padding: 0px;" class="commonText">${plist.getPaymentAmount()} </td>
+						<td style="width:150px; padding: 0px;" class="commonText">${plist.getClientId()} </td>
+						<td style="width:150px; padding: 0px;" class="commonText">${plist.getPaymentDate()} </td>
 						</tr>
 						</#if>
 						<#if i%2 != 0>
 						<tr   class="evenrowcolor">
-						<td style="width:20px; padding:  0px;"><input name="checkbox[]"  type="checkbox" value="${plist.getPymntId()}::${plist.getTxnId()}"></td>
-						<td style="width:150px; padding: 0px;" class="commonText">${plist.getPymntAmt()} </td>
-						<td style="width:150px; padding: 0px;" class="commonText">${plist.getClientName()} </td>
-						<td style="width:150px; padding: 0px;" class="commonText">${plist.getPymntDate()} </td>
+						<td style="width:20px; padding:  0px;"><input name="checkbox[]"  type="checkbox" value="${plist.getPaymentId()}"></td>
+						<td style="width:150px; padding: 0px;" class="commonText">${plist.getPaymentAmount()} </td>
+						<td style="width:150px; padding: 0px;" class="commonText">${plist.getClientId()} </td>
+						<td style="width:150px; padding: 0px;" class="commonText">${plist.getPaymentDate()} </td>
 						</tr>
 						</#if>
 						<#assign i = i+1>	
@@ -71,14 +77,14 @@
 				
 			</table>
 			
-			<div align="left">
+			
+		</div>
+		<div align="left" style="margin-left:40px;">
 				<br/>
 				<input type="hidden" id="approvecancel" name="approvecancel">
 				<input class="submitButton" id="approve" name="approve" type="button"  value="Approve" onclick="doApprove()">
-				<input class="submitButton" id="cancel" name="cancel" type="button"  value="Cancel" onclick="doCancel()">
 				
 			</div>
-		</div>
 <#else>
 <span id=Message> All transactions are either Approved or cancelled</span>
 </#if>

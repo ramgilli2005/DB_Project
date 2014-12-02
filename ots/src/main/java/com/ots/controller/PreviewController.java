@@ -44,6 +44,7 @@ public class PreviewController {
 		HttpSession session = req.getSession();
 		double oilPrice = clientDAO.getOilPrice();
 		double qty = Double.parseDouble(req.getParameter("qty"));
+		double cur_qty = Double.parseDouble(req.getParameter("cur_qty"));
 		String clientId = (String)session.getAttribute("clientId");
 		log.debug("Client Id in Session: "+clientId);
 		String usrLvl = (String)session.getAttribute("usrLvl");
@@ -51,6 +52,14 @@ public class PreviewController {
 		String commsnType = req.getParameter("commsntype");
 		double commission = 0.0;
 		double txnCost = 0.0;
+		if(orderType.equals("SELL")){
+			if((qty-cur_qty) < 0){
+				model.addAttribute("curQty", cur_qty);
+				model.addAttribute("Page", "clienthome");
+				model.addAttribute("errorMsg", "You do not have sufficient OIL to SELL");
+				return "main";
+			}
+		}
 		if(commsnType.equals(COMMISION_TYPE_CASH)){
 			 commission = util.computeCashCommission(oilPrice, qty, usrLvl);
 			 txnCost = util.computeCashTxnCost(commission, oilPrice, qty);

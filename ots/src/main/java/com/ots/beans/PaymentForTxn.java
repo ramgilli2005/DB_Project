@@ -1,12 +1,12 @@
 package com.ots.beans;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class PaymentForTxn {
 	
 	private int paymentId;
 	private double paymentAmount;
-	private Date paymentDate;
+	private Timestamp paymentDate;
 	private int txnId;
 	private String status;
 	private String clientId;
@@ -25,10 +25,10 @@ public class PaymentForTxn {
 	public void setPaymentAmount(double paymentAmount) {
 		this.paymentAmount = paymentAmount;
 	}
-	public Date getPaymentDate() {
+	public Timestamp getPaymentDate() {
 		return paymentDate;
 	}
-	public void setPaymentDate(Date paymentDate) {
+	public void setPaymentDate(Timestamp paymentDate) {
 		this.paymentDate = paymentDate;
 	}
 	public int getTxnId() {

@@ -39,7 +39,7 @@ public class ClientDAO {
 			}
 			if(txn.getType().equals("SELL")){
 				ClientDbo cdbo = ViewOilCashReserves(txn.getClientId());
-				double qty = cdbo.getQuantiy() + txn.getQuantity();
+				double qty = cdbo.getQuantiy() - txn.getQuantity();
 				String sellUpdateOil = "update clientdbo set ClientDbo_quantity="+ qty
 						+" where clientdbo_id="+txn.getClientId();
 				MySqlExecute.executeUpdateMySqlQuery(sellUpdateOil);
@@ -249,7 +249,7 @@ public class ClientDAO {
 				while(rs.next()){
 					payment = new PaymentForTxn();
 					payment.setPaymentId(rs.getInt(1));
-					payment.setPaymentDate(rs.getDate(2));
+					payment.setPaymentDate(rs.getTimestamp(2));
 					payment.setPaymentAmount(rs.getDouble(3));
 					payment.setTxnId(rs.getInt(4));
 					payment.setStatus(rs.getString(5));
@@ -363,6 +363,17 @@ public class ClientDAO {
 		}
 		return null;
 	}
+	
+	public void updateClientQty(double qty, String clientId){
+		String query = "update clientdbo set Clientdbo_quantity="+qty+" WHERE clientdbo_id='"+clientId;
+		try{
+			MySqlExecute.executeUpdateMySqlQuery(query);
+		} catch(Exception e){
+			log.error("Error in updationg clientdbo");
+		}
+		
+	}
+	
 	public boolean cancelTxn(List<Integer> txnIdList, String clientId, String cancellerId){
 		boolean b = false;
 		try{
@@ -374,8 +385,12 @@ public class ClientDAO {
 				txnInfo.setClientId(txn.getClientId());
 				ClientDbo cdbo = ViewOilCashReserves(clientId);
 				
-				//Provide the updated quantity
-				//double qty = cdbo.getQuantiy() - txn.getQuantity();
+				//Provide the updated quantity to cancel SELL Txns
+				if(txn.getType() == "SELL"){
+					double qty = cdbo.getQuantiy() + txn.getQuantity();
+					updateClientQty(qty, txn.getClientId());
+				}
+				
 				//txnInfo.setQty(qty);
 				
 				double creditAmt = cdbo.getCredit() + txn.getTxnCostPaid();
