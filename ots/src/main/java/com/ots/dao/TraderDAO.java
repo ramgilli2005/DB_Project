@@ -176,7 +176,7 @@ public class TraderDAO {
 				while (rs.next()) {
 					level = rs.getString(1);
 				}
-				if (level.toUpperCase() == "SILVER")
+				if (level.toUpperCase().equals("SILVER"))
 					CheckForGold(txnlog.getClientId());
 			} catch (Exception e) {
 				log.error("Error while fetching client level " + e);
@@ -186,10 +186,9 @@ public class TraderDAO {
 
 	// check if the client has crossed 30 transactions for the month
 	public boolean CheckForGold(String clientId) {
-		String query = "SELECT count(1) FROM `transaction_log` WHERE txn_log_client_id = "
-				+ clientId
-				+ " and "
-				+ "Month(txn_log_date) = Month(CURRENT_DATE) and Year(txn_log_date) = Year(CURRENT_DATE)";
+		String query = "SELECT sum(txn_log_quantity) FROM `transaction_log` WHERE txn_log_client_id = " 
+						+ clientId + " and txn_log_Status = 'APPROVED' and Month(txn_log_date) = Month(CURRENT_DATE) "
+								+ "and Year(txn_log_date) = Year(CURRENT_DATE)";
 		int count = 0;
 		try {
 			ResultSet rs = MySqlExecute.executeMySqlQuery(query);

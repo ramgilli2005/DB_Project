@@ -9,7 +9,9 @@ import com.ots.beans.AggregateInfo;
 import com.ots.util.MySqlExecute;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -35,7 +37,7 @@ public class ManagerDAO {
 				aggregateInfo.setStartDate(rs.getTimestamp(2));
 				aggrInfo.add(aggregateInfo);
 			}
-			if (type == "DAILY") {
+			if (type.equals("DAILY")) {
 				long oneDay = 1 * 24 * 60 * 60 * 1000;
 				List<AggregateInfo> aggreInfo = new ArrayList<AggregateInfo>();
 				AggregateInfo dailyInfo = new AggregateInfo();
@@ -43,10 +45,18 @@ public class ManagerDAO {
 				Timestamp t = startDate;
 				int i;
 				boolean flag = true;
-				for (ts = startDate, i = 1; ts != endDate; ts = aggrInfo.get(
-						++i).getStartDate()) {
+				log.debug("AggrInfo Size: "+aggrInfo.size());
+				for (i = 0; i< aggrInfo.size(); i++) {
+					ts = aggrInfo.get(i).getStartDate();
 					if (flag == true) {
 						t = ts;
+						String str = ts.toString();
+						str = str.substring(0, 10);
+						str += " 00:00:00";
+						SimpleDateFormat dateFormat = new SimpleDateFormat(
+								"yyyy-MM-dd hh:mm:ss");
+						Date parsedDate = dateFormat.parse(str);
+						t = new java.sql.Timestamp(parsedDate.getTime());
 					}
 					flag = false;
 					if (ts.getTime() < (t.getTime() + oneDay)) {
@@ -64,8 +74,13 @@ public class ManagerDAO {
 					dailyInfo = new AggregateInfo();
 					flag = true;
 				}
+				dailyInfo.setStartDate(t);
+				dailyInfo.setEndDate(ts);
+				log.debug("ManagerDAO: End Date: "+ dailyInfo.getEndDate());
+				log.debug("ManagerDAO: Count: "+ dailyInfo.getCount());
+				aggreInfo.add(dailyInfo);
 				return aggreInfo;
-			} else if (type == "WEEKLY") {
+			} else if (type.equals("WEEKLY")) {
 				// 84600000 milliseconds in a day
 				long oneWeek = 7 * 24 * 60 * 60 * 1000;
 				List<AggregateInfo> aggreInfo = new ArrayList<AggregateInfo>();
@@ -74,8 +89,8 @@ public class ManagerDAO {
 				Timestamp t = startDate;
 				int i;
 				boolean flag = true;
-				for (ts = startDate, i = 1; ts != endDate; ts = aggrInfo.get(
-						++i).getStartDate()) {
+				for (i = 0; i< aggrInfo.size(); i++) {
+					ts = aggrInfo.get(i).getStartDate();
 					if (flag == true) {
 						t = ts;
 					}
@@ -93,17 +108,20 @@ public class ManagerDAO {
 					weeklyInfo = new AggregateInfo();
 					flag = true;
 				}
+				weeklyInfo.setStartDate(t);
+				weeklyInfo.setEndDate(ts);
+				aggreInfo.add(weeklyInfo);
 				return aggreInfo;
-			} else if (type == "MONTHLY") {
-				long oneMonth = 30 * 24 * 60 * 60 * 1000;
+			} else if (type.equals("MONTHLY")) {
+				long oneMonth = 30L * 24L * 60L * 60L * 1000L;
 				List<AggregateInfo> aggreInfo = new ArrayList<AggregateInfo>();
 				AggregateInfo MonthlyInfo = new AggregateInfo();
 				Timestamp ts = startDate;
 				Timestamp t = startDate;
 				int i;
 				boolean flag = true;
-				for (ts = startDate, i = 1; ts != endDate; ts = aggrInfo.get(
-						++i).getStartDate()) {
+				for (i = 0; i< aggrInfo.size(); i++) {
+					ts = aggrInfo.get(i).getStartDate();
 					if (flag == true) {
 						t = ts;
 					}
@@ -121,10 +139,13 @@ public class ManagerDAO {
 					MonthlyInfo = new AggregateInfo();
 					flag = true;
 				}
+				MonthlyInfo.setStartDate(t);
+				MonthlyInfo.setEndDate(ts);
+				aggreInfo.add(MonthlyInfo);
 				return aggreInfo;
 			}
 		} catch (Exception e) {
-			log.error("Error while fetching record on daily weekly and monthly basis"
+			log.error("Error while fetching record on daily weekly and monthly basis "
 					+ e);
 		}
 		return aggrInfo;
